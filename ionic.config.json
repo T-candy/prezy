@@ -1,0 +1,8 @@
+{
+  "name": "prezy",
+  "app_id": "52920357",
+  "type": "ionic-angular",
+  "integrations": {
+    "cordova": {}
+  }
+}
