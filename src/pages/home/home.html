@@ -1,17 +1,60 @@
 <ion-header>
-  <ion-navbar>
-    <ion-title>Home</ion-title>
-  </ion-navbar>
+  <ion-navbar style="min-height:80px">
+   <ion-grid>
+     <ion-row>
+        <ion-col>
+            <img src="images/profile.jpeg" (click)="prof()" style="width:60px;height:60px;border-radius:50%">
+        </ion-col>
+        <ion-col style="margin-top:10px">
+            <div class="can-toggle" >
+              <div class="can-toggle demo-rebrand-2" >
+                    <input id="e" type="checkbox" >
+                    <label for="e">
+                      <div class="can-toggle__switch" data-checked="On" data-unchecked="No" style="max-width:150px; max-height:50px"></div>
+                    </label>
+                  </div>
+                  </div>
+                </ion-col>
+        <ion-col text-right style="margin-top:-5px">
+          <button ion-button icon-only large clear color="dark" (click)="chatm()">
+            <ion-icon name="ios-text"></ion-icon>
+          </button>
+        </ion-col>
+     </ion-row>
+   </ion-grid>
+   </ion-navbar>
 </ion-header>
 
 <ion-content padding>
-  <h2>Welcome to Ionic!</h2>
-  <p>
-    This starter project comes with simple tabs-based layout for apps
-    that are going to primarily use a Tabbed UI.
+  <div swing-stack #myswing1 [stackConfig]="stackConfig" (throwoutleft)="voteUp(false)" (throwoutright)="voteUp(true)" id="card-stack">
+    <ion-card #mycards1 swing-card *ngFor="let card of cards" class="td-card">
+  <p text-center *ngIf="card.picture">
+    <img *ngIf="card.picture" [src]="card.picture.large" style="min-height:100%;max-width:90%;border-radius:0%;margin:0 auto;height:200px;width:200px;box-shadow: 2px 3px 5px grey;">
   </p>
-  <p>
-    Take a look at the <code>src/pages/</code> directory to add or change tabs,
-    update any existing page or create new pages.
-  </p>
+  <ion-card-content>
+  <ion-card-title text-center>{{ card.name.first }} {{ card.name.last }}</ion-card-title>
+  <p>株式会社Prezyの代表をしてます。前職では、Googleで人工知能の研究をしていました。</p>
+</ion-card-content>
+</ion-card>
+</div>
+
+  <div text-center style="bottom:10px;position:fixed; align-content:center">
+    <ion-buttons text-center >
+        <button ion-button icon-only  outline color="cusyellow" (click)="lgn()" style="width:50px;height:50px;border-radius:50%">
+            <ion-icon name="md-refresh"></ion-icon>
+          </button>
+          <button ion-button icon-only outline color="danger" (click)="voteUp(false)" style="width:70px;height:70px;border-radius:50%">
+              <ion-icon name="md-close"></ion-icon>
+            </button>
+          <button ion-button icon-only outline color="cuspurple" style="width:50px;height:50px;border-radius:50%" (click)="chatid()">
+                <ion-icon name="md-flash"></ion-icon>
+          </button>
+          <button ion-button icon-only outline color="secondary" (click)="voteUp(true)" style="width:70px;height:70px;border-radius:50%">
+                <ion-icon name="md-heart"></ion-icon>
+          </button>
+          <button ion-button icon-only outline color="primary" style="width:50px;height:50px;border-radius:50%">
+               <ion-icon name="md-star"></ion-icon>
+            </button>
+    </ion-buttons>
+  </div>
 </ion-content>
