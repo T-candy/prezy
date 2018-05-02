@@ -64,4 +64,42 @@ export class UserProvider {
       })
       return promise;
   }
+
+  updatedetail(provider){
+    var promise = new Promise((resolve, reject) => {
+      provider.loggedin = true;
+        this.afireauth.auth.currentUser.updateProfile({
+          displayName: this.afireauth.auth.currentUser.displayName,
+          photoURL: ''
+        }).then(() => {
+            firebase.database().ref('/users/' + firebase.auth().currentUser.uid).update({
+            name: this.afireauth.auth.currentUser.displayName,
+            intro: provider.intro,
+            affiliation: provider.affiliation,
+            skill: provider.skill,
+            school: provider.school,
+            company: provider.company,
+            uid: firebase.auth().currentUser.uid
+            }).then(() => {
+                resolve({ success: true });
+                }).catch((err) => {
+                    reject(err);
+                })
+        }).catch((err) => {
+              reject(err);
+           })
+    })
+    return promise;
+  }
+
+getuserdetails() {
+    var promise = new Promise((resolve, reject) => {
+    this.firedata.child(firebase.auth().currentUser.uid).once('value', (snapshot) => {
+      resolve(snapshot.val());
+    }).catch((err) => {
+      reject(err);
+      })
+    })
+    return promise;
+  }
 }

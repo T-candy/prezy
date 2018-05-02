@@ -5,43 +5,16 @@
 </ion-header>
 
 <ion-content>
-<ion-row>
-  <ion-col col-8 style="width:100%; max-height:300px">
-      <img src="{{provider.profilePic}}" style="width:100%;border-radius:5%;box-shadow: 2px 3px 5px grey;z-index:-1; position: relative;">
-      <p class="imglg" >1</p>
-  </ion-col>
-  <ion-col col-4>
-      <img src="{{imgurl}}" (click)="chooseimage()" style="border-radius:5%;margin-top:10px;box-shadow: 2px 3px 5px grey;">
-      <p class="imgsm" >2</p>
-      <p class="imgsmb" ><ion-icon style="margin-top:5px" name="cog"></ion-icon></p>
-      <br>
-      <img src="{{imgurl}}" (click)="chooseimage()" style="border-radius:5%;margin-top:10px;box-shadow: 2px 3px 5px grey;">
-      <p class="imgsm" >3</p>
-      <p class="imgsmb" ><ion-icon style="margin-top:5px" name="cog"></ion-icon></p>
-  </ion-col>
-  <ion-col col-4>
-      <img src="{{imgurl}}" (click)="chooseimage()" style="border-radius:5%;margin-top:10px;box-shadow: 2px 3px 5px grey;">
-      <p class="imgsm" >4</p>
-      <p class="imgsmb" ><ion-icon style="margin-top:5px" name="cog"></ion-icon></p>
-  </ion-col>
-  <ion-col col-4>
-      <img src="{{imgurl}}" (click)="chooseimage()" style="border-radius:5%;margin-top:10px;box-shadow: 2px 3px 5px grey;">
-      <p class="imgsm" >5</p>
-      <p class="imgsmb" ><ion-icon style="margin-top:5px" name="cog"></ion-icon></p>
-  </ion-col>
-  <ion-col col-4>
-      <img src="{{imgurl}}" (click)="chooseimage()" style="border-radius:5%;margin-top:10px;box-shadow: 2px 3px 5px grey;">
-      <p class="imgsm">6</p>
-      <p class="imgsmb" ><ion-icon style="margin-top:5px" name="cog"></ion-icon></p>
-  </ion-col>
-</ion-row>
-<ion-item>
+  <p text-center>
+    <img src="{{provider.profilePic}}" (click)="chooseimage()" style="width:50%;border-radius:50%;box-shadow: 2px 3px 5px grey;">
+  </p>
+<!-- <ion-item>
     <ion-toggle checked="false"></ion-toggle>
     <ion-label>
       Smart Photos
     </ion-label>
     <ion-icon name='photos' item-start></ion-icon>
-  </ion-item>
+  </ion-item> -->
 
   <div [hidden]="!moveon">
     <button ion-button round outline (click)="proceed()">Skip this step</button>
@@ -54,17 +27,31 @@
 
   <ion-item>
     <ion-label stacked>あなたのプロフィール</ion-label>
-    <ion-textarea placeholder="あなたのことが分かる自己紹介を書いてください。"></ion-textarea>
+    <ion-textarea placeholder="あなたのことが分かる自己紹介を書いてください。" [(ngModel)]="provider.intro"></ion-textarea>
   </ion-item>
 
   <ion-item>
-    <ion-label stacked>所属</ion-label>
-    <ion-input type="text"></ion-input>
+    <ion-label stacked>肩書き</ion-label>
+    <ion-input type="text" placeholder="名前の下に記載する肩書き" [(ngModel)]="provider.affiliation"></ion-input>
   </ion-item>
   <ion-item>
-    関心のある業界
+    <p>学歴</p>
+    <button ion-button small item-end icon-left color="light" (click)="doSchool()">編集</button>
+    <p>{{provider.school.name}}</p>
+    <p>{{provider.school.department}}</p>
+    <p>{{provider.school.graduation}}</p>
+  </ion-item>
+  <ion-item>
+    <p>職歴</p>
+    <button ion-button small item-end icon-left color="light" (click)="doCompany()">編集</button>
+    <p>{{provider.company.name}}</p>
+    <p>{{provider.company.position}}</p>
+    <p>{{provider.company.category}}</p>
+  </ion-item>
+  <ion-item>
+    <p>スキル</p>
     <button ion-button small item-end icon-left color="light" (click)="doCheckbox()">編集</button>
-    <p>インターネット</p>
+    <p>{{provider.skill}}</p>
   </ion-item>
   <p text-center padding>
   <button ion-button full class="butn" (click)='profileSave()'>Save</button>

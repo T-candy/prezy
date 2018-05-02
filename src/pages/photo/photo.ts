@@ -27,11 +27,23 @@ export class PhotoPage {
   provider = {
     name: '',
     email: '',
-    profilePic: ''
+    profilePic: '',
+    intro: '',
+    affiliation: '',
+    skill: '',
+    school:{
+      name: '',
+      department: '',
+      graduation: ''
+    },
+    company: {
+      name: '',
+      position: '',
+      category: ''
+    }
   }
 
   testCheckboxOpen: boolean;
-  testCheckboxResult;
 
   firedata = firebase.database().ref('/users');
 
@@ -47,6 +59,15 @@ export class PhotoPage {
     this.provider.name = this.navParams.get('name');
     this.provider.email = this.navParams.get('email');
     this.provider.profilePic = this.navParams.get('profilePic');
+    this.provider.intro = this.navParams.get('intro');
+    this.provider.affiliation = this.navParams.get('affiliation');
+    this.provider.skill = this.navParams.get('skill');
+    this.provider.school.name = this.navParams.get('school.name');
+    this.provider.school.department = this.navParams.get('school.department');
+    this.provider.school.graduation = this.navParams.get('school.graduation');
+    this.provider.company.name = this.navParams.get('company.name');
+    this.provider.company.position = this.navParams.get('company.position');
+    this.provider.company.category = this.navParams.get('company.category');
   }
 
   ionViewDidLoad() {
@@ -74,65 +95,143 @@ export class PhotoPage {
     loader.present();
     this.userservice.updateimage(this.imgurl).then((res: any) => {
       loader.dismiss();
-      // if (res.success) {
-      //   this.navCtrl.setRoot('TabsPage');
-      // }
-      // else {
-      //   alert(res);
-      // }
     })
   }
 
   proceed() {
-    this.navCtrl.setRoot('ProfilePage');
+    this.navCtrl.setRoot(ProfilePage, this.provider);
   }
 
-  // 関心のある業界
+  // 学歴
+  doSchool() {
+    let alert = this.alertCtrl.create({
+      title: '学歴の編集',
+      inputs: [{
+        name: 'schoolname',
+        placeholder: '学校名',
+        type: 'text'
+      },{
+        name: 'department',
+        placeholder: '学部',
+        type: 'text'
+      },{
+        name: 'graduation',
+        placeholder: '卒業（予定）年度',
+        type: 'number'
+      }],
+      buttons: [{
+        text: 'Cancel',
+        role: 'cancel',
+        handler: data => {
+          console.log('Cancel clicked');
+        }
+      },{
+        text: 'Okay',
+        handler: data => {
+          console.log('School data:', data);
+          this.provider.school.name = data.schoolname;
+          this.provider.school.department = data.department;
+          this.provider.school.graduation = data.graduation;
+        }
+      }]
+    });
+    alert.present();
+}
+
+// 職歴
+doCompany() {
+  let alert = this.alertCtrl.create({
+    title: '職歴の編集',
+    inputs: [{
+      name: 'companyname',
+      placeholder: '企業名',
+      type: 'text'
+    },{
+      name: 'position',
+      placeholder: '担当の役職（インターンシップなど）',
+      type: 'text'
+    },{
+      name: 'category',
+      placeholder: '担当の職種（エンジニアなど）',
+      type: 'text'
+    }],
+    buttons: [{
+      text: 'Cancel',
+      role: 'cancel',
+      handler: data => {
+        console.log('Cancel clicked');
+      }
+    },{
+      text: 'Okay',
+      handler: data => {
+        console.log('School data:', data);
+        this.provider.company.name = data.companyname;
+        this.provider.company.position = data.position;
+        this.provider.company.category = data.category;
+      }
+    }]
+  });
+  alert.present();
+}
+
+  // 関心のある業界 これにするかは仮
   doCheckbox() {
     let alert = this.alertCtrl.create();
-    alert.setTitle('どれが興味ある？');
+    alert.setTitle('スキルの編集');
 
     alert.addInput({
       type: 'checkbox',
-      label: 'IT・ソフトウェア・情報',
-      value: 'value1',
+      label: 'Git',
+      value: 'Git',
       checked: true
     });
 
     alert.addInput({
       type: 'checkbox',
-      label: 'メーカー',
-      value: 'value2'
+      label: 'Java',
+      value: 'Java'
     });
 
     alert.addInput({
       type: 'checkbox',
-      label: '商社',
-      value: 'value3'
+      label: 'Ruby',
+      value: 'Ruby'
     });
 
     alert.addInput({
       type: 'checkbox',
-      label: '銀行・証券・金融',
-      value: 'value4'
+      label: 'Swift',
+      value: 'Swift'
     });
 
     alert.addInput({
       type: 'checkbox',
-      label: '情報（広告・通信・マスコミ）',
-      value: 'value5'
+      label: 'PHP',
+      value: 'PHP'
     });
 
     alert.addInput({
       type: 'checkbox',
-      label: '教育',
-      value: 'value6'
+      label: 'CSS',
+      value: 'CSS'
     });
 
     alert.addInput({
       type: 'checkbox',
-      label: '旅行・インバウンド',
-      value: 'value6'
+      label: 'HTML',
+      value: 'HTML'
+    });
+
+    alert.addInput({
+      type: 'checkbox',
+      label: '英語',
+      value: '英語'
+    });
+
+    alert.addInput({
+      type: 'checkbox',
+      label: '中国語',
+      value: '中国語'
     });
 
     alert.addButton('Cancel');
@@ -141,7 +240,8 @@ export class PhotoPage {
       handler: data => {
         console.log('Checkbox data:', data);
         this.testCheckboxOpen = false;
-        this.testCheckboxResult = data;
+        // this.testCheckboxResult = data;
+        this.provider.skill = data;
       }
     });
     alert.present().then(() => {
@@ -150,6 +250,19 @@ export class PhotoPage {
   }
 
   profileSave(){
+    let loader = this.loadingCtrl.create({
+      content: 'Please wait'
+    })
+    loader.present();
+    this.userservice.updatedetail(this.provider).then((res: any) => {
+      loader.dismiss();
+      if (res.success) {
+        this.navCtrl.setRoot(ProfilePage, this.provider);
+      }
+      else {
+        alert(res);
+      }
+    })
   }
 
 }

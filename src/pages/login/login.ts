@@ -9,6 +9,7 @@ import { Facebook } from '@ionic-native/facebook';
 import { usercreds } from '../../models/interfaces/usercreds';
 import { AuthProvider } from '../../providers/auth/auth';
 
+import { HomePage } from '../home/home';
 import { ProfilePage } from '../profile/profile';
 
 /**
@@ -26,12 +27,25 @@ export class LoginPage {
 
   firedata = firebase.database().ref('/users');
 
-provider = {
-  loggedin: false,
-  name: '',
-  email: '',
-  profilePic: ''
-}
+  provider = {
+    loggedin: false,
+    name: '',
+    email: '',
+    profilePic: '',
+    intro: '',
+    affiliation: '',
+    skill: '',
+    school:{
+      name: '',
+      department: '',
+      graduation: ''
+    },
+    company: {
+      name: '',
+      position: '',
+      category: ''
+    }
+  }
 
   constructor(public navCtrl: NavController,
     public navParams: NavParams,
@@ -83,7 +97,12 @@ provider = {
         this.provider.loggedin = true;
         this.provider.name = res.user.displayName;
         this.provider.email = res.user.email;
-        this.provider.profilePic = res.user.photoURL;
+        if (res.user.photoURL == null ) {
+          this.provider.profilePic = 'https://firebasestorage.googleapis.com/v0/b/myapp-4eadd.appspot.com/o/chatterplace.png?alt=media&token=e51fa887-bfc6-48ff-87c6-e2c61976534e';
+        } else {
+          this.provider.profilePic = res.user.photoURL;
+        }
+        console.log(res);
         this.afAuth.auth.currentUser.updateProfile({
           displayName : res.user.displayName,
   		    // email : res.user.email,
@@ -92,10 +111,24 @@ provider = {
           this.firedata.child(this.afAuth.auth.currentUser.uid).set({
             name: this.afAuth.auth.currentUser.displayName,
             email: this.afAuth.auth.currentUser.email,
-            photoURL: this.afAuth.auth.currentUser.photoURL
+            // photoURL: this.afAuth.auth.currentUser.photoURL,
+            photoURL: this.provider.profilePic,
+            intro: '',
+            affiliation: '',
+            skill: '',
+            school:{
+              name: '',
+              department: '',
+              graduation: ''
+            },
+            company: {
+              name: '',
+              position: '',
+              category: ''
+            }
           }).then(() => {
             resolve({ success: true });
-            this.navCtrl.setRoot(ProfilePage, this.provider);
+            this.navCtrl.setRoot(HomePage, this.provider);
             }).catch((err) => {
               reject(err);
           })

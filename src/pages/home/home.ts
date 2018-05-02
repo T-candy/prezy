@@ -1,5 +1,5 @@
 import { Component,ViewChild, ViewChildren, QueryList } from '@angular/core';
-import { NavController } from 'ionic-angular';
+import { NavController, NavParams } from 'ionic-angular';
 import { ProfilePage } from '../profile/profile';
 import { ChatmainPage } from '../chatmain/chatmain';
 import { ChatindPage } from '../chatind/chatind';
@@ -34,8 +34,19 @@ export class HomePage {
   stackConfig: StackConfig;
   recentCard: string = '';
 
+  provider = {
+    loggedin: false,
+    name: '',
+    email: '',
+    profilePic: '',
+    intro: '',
+    affiliation: '',
+    industry: ''
+  }
+
   constructor(
     public navCtrl: NavController,
+    public navParams: NavParams,
     private http: Http) {
     this.stackConfig = {
       // スワイプの方向とかもろもろ
@@ -49,6 +60,14 @@ export class HomePage {
         return 300;
       }
     };
+
+    this.provider.loggedin = this.navParams.get('loggedin');
+    this.provider.name = this.navParams.get('name');
+    this.provider.email = this.navParams.get('email');
+    this.provider.profilePic = this.navParams.get('profilePic');
+    this.provider.intro = this.navParams.get('intro');
+    this.provider.affiliation = this.navParams.get('affiliation');
+    this.provider.industry = this.navParams.get('industry');
   }
 
   ngAfterViewInit() {
@@ -115,7 +134,7 @@ export class HomePage {
 
   prof(){
     {
-      this.navCtrl.push(ProfilePage);
+      this.navCtrl.push(ProfilePage,  this.provider);
       }
   }
   chatm(){
@@ -123,8 +142,5 @@ export class HomePage {
   }
   chatid(){
     this.navCtrl.push(ChatindPage)
-  }
-  lgn(){
-    this.navCtrl.push(LoginPage)
   }
 }

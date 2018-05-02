@@ -31,23 +31,8 @@
   </p>
   <p text-center *ngIf="provider.loggedin">
     {{provider.name}} <br>
-   <span style="color:grey">Profession<br>Affiliationy</span>
+   <span style="color:grey">{{provider.affiliation}}</span>
   </p>
-
-  <ion-row text-center>
-    <ion-col>
-        <button ion-button icon-left outline color="cuspurple">
-            <ion-icon style="margin-top:-4px" name="infinite"></ion-icon>
-           アップグレード
-          </button>
-    </ion-col>
-    <ion-col>
-        <button ion-button icon-left outline color="cuspurple" (click)="pho()">
-            <ion-icon style="margin-top:-4px" name="md-cog"></ion-icon>
-           設定
-          </button>
-    </ion-col>
-  </ion-row>
   <!-- <ion-row>
     <ion-col>
         <p text-center>
@@ -67,10 +52,51 @@
   </ion-row> -->
   <ion-card>
     <ion-card-content  text-center>
-    <ion-card-title>学歴</ion-card-title>
-    <p>東北大学</p>
+    <ion-card-title>自己紹介</ion-card-title>
+    {{provider.intro}}
   </ion-card-content>
   </ion-card>
+
+  <ion-card>
+    <ion-card-content  text-center>
+    <ion-card-title>学歴</ion-card-title>
+    <p>{{provider.school.name}}</p>
+    <p>{{provider.school.department}}</p>
+    <p>{{provider.school.graduation}}年卒業</p>
+  </ion-card-content>
+  </ion-card>
+
+  <ion-card>
+    <ion-card-content  text-center>
+    <ion-card-title>職歴</ion-card-title>
+    <p>{{provider.company.name}}</p>
+    <p>{{provider.company.position}}</p>
+    <p>{{provider.company.category}}</p>
+  </ion-card-content>
+  </ion-card>
+
+  <ion-card>
+    <ion-card-content  text-center>
+    <ion-card-title>スキル</ion-card-title>
+    <p>{{provider.skill}}</p>
+  </ion-card-content>
+  </ion-card>
+
+  <ion-row text-center>
+    <ion-col>
+        <button ion-button icon-left outline color="cuspurple">
+            <ion-icon style="margin-top:-4px" name="infinite"></ion-icon>
+           アップグレード
+          </button>
+    </ion-col>
+    <ion-col>
+        <button ion-button icon-left outline color="cuspurple" (click)="pho()">
+            <ion-icon style="margin-top:-4px" name="md-cog"></ion-icon>
+           設定
+          </button>
+    </ion-col>
+  </ion-row>
+
   <h4 text-center>Share with Friends</h4>
   <h5 text-center>Find match</h5>
   <p text-center>

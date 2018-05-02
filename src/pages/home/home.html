@@ -3,7 +3,7 @@
    <ion-grid>
      <ion-row>
         <ion-col>
-            <img src="images/profile.jpeg" (click)="prof()" style="width:60px;height:60px;border-radius:50%">
+            <img src="{{provider.profilePic}}" (click)="prof()" style="width:60px;height:60px;border-radius:50%">
         </ion-col>
         <ion-col style="margin-top:10px">
             <div class="can-toggle" >
@@ -38,23 +38,23 @@
 </ion-card>
 </div>
 
-  <div text-center style="bottom:10px;position:fixed; align-content:center">
-    <ion-buttons text-center >
-        <button ion-button icon-only  outline color="cusyellow" (click)="lgn()" style="width:50px;height:50px;border-radius:50%">
+  <div text-center style="bottom:10px;left:0;right: 0;position: fixed;width:100%;align-content:center;">
+    <ion-buttons text-center style="display:inline-block;">
+        <!-- <button ion-button icon-only  outline color="cusyellow"style="width:50px;height:50px;border-radius:50%">
             <ion-icon name="md-refresh"></ion-icon>
-          </button>
+          </button> -->
           <button ion-button icon-only outline color="danger" (click)="voteUp(false)" style="width:70px;height:70px;border-radius:50%">
-              <ion-icon name="md-close"></ion-icon>
+              <ion-icon name="md-thumbs-down"></ion-icon>
             </button>
           <button ion-button icon-only outline color="cuspurple" style="width:50px;height:50px;border-radius:50%" (click)="chatid()">
                 <ion-icon name="md-flash"></ion-icon>
           </button>
           <button ion-button icon-only outline color="secondary" (click)="voteUp(true)" style="width:70px;height:70px;border-radius:50%">
-                <ion-icon name="md-heart"></ion-icon>
+                <ion-icon name="md-thumbs-up"></ion-icon>
           </button>
-          <button ion-button icon-only outline color="primary" style="width:50px;height:50px;border-radius:50%">
+          <!-- <button ion-button icon-only outline color="primary" style="width:50px;height:50px;border-radius:50%">
                <ion-icon name="md-star"></ion-icon>
-            </button>
+            </button> -->
     </ion-buttons>
   </div>
 </ion-content>
