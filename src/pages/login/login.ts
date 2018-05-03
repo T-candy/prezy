@@ -1,5 +1,5 @@
 import { Component, Injectable } from '@angular/core';
-import { IonicPage, NavController, NavParams } from 'ionic-angular';
+import { IonicPage, NavController, NavParams, AlertController } from 'ionic-angular';
 import { AngularFireAuth } from 'angularfire2/auth';
 import * as firebase from 'firebase/app';
 
@@ -47,10 +47,16 @@ export class LoginPage {
     }
   }
 
+  credentials = {} as usercreds;
+
   constructor(public navCtrl: NavController,
     public navParams: NavParams,
+    public authservice: AuthProvider,
+    public alertCtrl: AlertController,
     private afAuth: AngularFireAuth,
-    private fb: Facebook, private platform: Platform) {
+    private fb: Facebook,
+    private platform: Platform
+  ) {
     //   afAuth.authState.subscribe(user => {
     //   if (!user) {
     //     this.displayName = null;
@@ -109,6 +115,7 @@ export class LoginPage {
   		    photoURL : res.user.photoURL
         }).then(() => {
           this.firedata.child(this.afAuth.auth.currentUser.uid).set({
+            uid: this.afAuth.auth.currentUser.uid,
             name: this.afAuth.auth.currentUser.displayName,
             email: this.afAuth.auth.currentUser.email,
             // photoURL: this.afAuth.auth.currentUser.photoURL,
@@ -141,4 +148,51 @@ export class LoginPage {
     })
     return promise;
     }
+
+// メールログインボタン　既にFirebaseに登録しているユーザーのみ
+    Prelogin(){
+      let alert = this.alertCtrl.create({
+    title: 'Login',
+    inputs: [
+      {
+        name: 'email',
+        placeholder: 'email'
+      },
+      {
+        name: 'password',
+        placeholder: 'Password',
+        type: 'password'
+      }
+    ],
+    buttons: [
+      {
+        text: 'Cancel',
+        role: 'cancel',
+        handler: data => {
+          console.log('Cancel clicked');
+        }
+      },
+      {
+        text: 'Login',
+        handler: data => {
+            this.credentials.email = data.email;
+            this.credentials.password = data.password;
+            this.authservice.login(this.credentials).then((res: any) => {
+                  if (!res.code) {
+                    this.provider.loggedin = true;
+                    this.provider.name = this.credentials.email;
+                    this.provider.profilePic = 'images/kao1.jpg';
+                    this.navCtrl.setRoot(HomePage, this.provider);
+                  } else {
+                    // alert(res);
+                    console.log(res);
+                }
+              })
+            }
+      }
+    ]
+  });
+  alert.present();
+}
+
 }

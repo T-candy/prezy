@@ -56,22 +56,43 @@ export class PhotoPage {
     public loadingCtrl: LoadingController,
     public alertCtrl: AlertController
   ) {
-    this.provider.name = this.navParams.get('name');
-    this.provider.email = this.navParams.get('email');
-    this.provider.profilePic = this.navParams.get('profilePic');
-    this.provider.intro = this.navParams.get('intro');
-    this.provider.affiliation = this.navParams.get('affiliation');
-    this.provider.skill = this.navParams.get('skill');
-    this.provider.school.name = this.navParams.get('school.name');
-    this.provider.school.department = this.navParams.get('school.department');
-    this.provider.school.graduation = this.navParams.get('school.graduation');
-    this.provider.company.name = this.navParams.get('company.name');
-    this.provider.company.position = this.navParams.get('company.position');
-    this.provider.company.category = this.navParams.get('company.category');
+    // this.provider.name = this.navParams.get('name');
+    // this.provider.email = this.navParams.get('email');
+    // this.provider.profilePic = this.navParams.get('profilePic');
+    // this.provider.intro = this.navParams.get('intro');
+    // this.provider.affiliation = this.navParams.get('affiliation');
+    // this.provider.skill = this.navParams.get('skill');
+    // this.provider.school.name = this.navParams.get('school.name');
+    // this.provider.school.department = this.navParams.get('school.department');
+    // this.provider.school.graduation = this.navParams.get('school.graduation');
+    // this.provider.company.name = this.navParams.get('company.name');
+    // this.provider.company.position = this.navParams.get('company.position');
+    // this.provider.company.category = this.navParams.get('company.category');
   }
 
   ionViewDidLoad() {
     console.log('ionViewDidLoad PhotoPage');
+  }
+
+  ionViewWillEnter() {
+    this.loaduserdetails();
+  }
+
+  loaduserdetails() {
+    this.userservice.getuserdetails().then((res: any) => {
+      this.provider.name = res.name;
+      this.provider.email = res.email;
+      this.provider.profilePic = res.photoURL;
+      this.provider.intro = res.intro;
+      this.provider.affiliation = res.affiliation;
+      this.provider.skill = res.skill;
+      this.provider.school.name = res.school.name;
+      this.provider.school.department = res.school.department;
+      this.provider.school.graduation = res.school.graduation;
+      this.provider.company.name = res.company.name;
+      this.provider.company.position = res.company.position;
+      this.provider.company.category = res.company.category;
+    })
   }
 
   chooseimage() {

@@ -15,6 +15,7 @@ import { MyApp } from './app.component';
 import { AuthProvider } from '../providers/auth/auth';
 
 import { HttpModule } from '@angular/http';
+import { HttpClientModule } from '@angular/common/http';
 import { SwingModule } from 'angular2-swing';
 
 import { File } from '@ionic-native/file';
@@ -30,6 +31,8 @@ import { PhotoPage } from '../pages/photo/photo';
 import { LoginPage } from '../pages/login/login';
 import { UserProvider } from '../providers/user/user';
 import { ImghandlerProvider } from '../providers/imghandler/imghandler';
+import { RequestsProvider } from '../providers/requests/requests';
+import { ChatProvider } from '../providers/chat/chat';
 
 @NgModule({
   declarations: [
@@ -49,6 +52,7 @@ import { ImghandlerProvider } from '../providers/imghandler/imghandler';
     AngularFireAuthModule,
     AngularFireDatabaseModule,
     HttpModule,
+    HttpClientModule,
     SwingModule
   ],
   bootstrap: [IonicApp],
@@ -74,7 +78,9 @@ import { ImghandlerProvider } from '../providers/imghandler/imghandler';
     ImghandlerProvider,
     File,
     FileChooser,
-    FilePath
+    FilePath,
+    RequestsProvider,
+    ChatProvider
   ]
 })
 export class AppModule {}

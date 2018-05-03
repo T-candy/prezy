@@ -2,15 +2,15 @@
     <ion-navbar style="min-height:80px">
      <ion-grid>
        <ion-row>
-          <ion-col>         
-              <img src="images/profile.jpeg" style="width:60px;height:60px;border-radius:50%">         
+          <ion-col>
+              <img src="images/profile.jpeg" style="width:60px;height:60px;border-radius:50%">
           </ion-col>
           <ion-col style="margin-top:10px">
               <div class="can-toggle" >
-                <div class="can-toggle demo-rebrand-2" >                 
-                      <input id="e" type="checkbox" >                
-                      <label for="e">                
-                        <div class="can-toggle__switch" data-checked="On" data-unchecked="No" style="max-width:150px; max-height:50px"></div>             
+                <div class="can-toggle demo-rebrand-2" >
+                      <input id="e" type="checkbox" >
+                      <label for="e">
+                        <div class="can-toggle__switch" data-checked="On" data-unchecked="No" style="max-width:150px; max-height:50px"></div>
                       </label>
                     </div>
                     </div>
@@ -21,7 +21,7 @@
             </button>
           </ion-col>
        </ion-row>
-     </ion-grid>    
+     </ion-grid>
      </ion-navbar>
   </ion-header>
 
@@ -39,18 +39,10 @@
           </ion-segment-button>
         </ion-segment>
       </div>
-      
+
       <div [ngSwitch]="chats">
         <ion-list *ngSwitchCase="'heart'">
-          <ion-item>
-            <ion-thumbnail item-start>
-              <img src="images/disha.jpg" style="border-radius:50%">
-            </ion-thumbnail>
-            <h2>Disha</h2> <br>
-            <p>This is text message</p>
-            <ion-badge item-end>2</ion-badge>
-
-          </ion-item>
+          <ion-list-header>All Users</ion-list-header>
           <ion-item>
               <ion-thumbnail item-start>
                 <img src="images/disha.jpg" style="border-radius:50%">
@@ -58,105 +50,57 @@
               <h2>Disha</h2>
               <ion-badge item-end>2</ion-badge>
             </ion-item>
-            <ion-item>
-                <ion-thumbnail item-start>
-                  <img src="images/disha.jpg" style="border-radius:50%">
-                </ion-thumbnail>
-                <h2>Disha</h2>
-                <ion-badge item-end>2</ion-badge>
-              </ion-item>
-              <ion-item>
-                  <ion-thumbnail item-start>
-                    <img src="images/disha.jpg" style="border-radius:50%">
-                  </ion-thumbnail>
-                  <h2>Disha</h2>
-                  <ion-badge item-end>2</ion-badge>
-                </ion-item>
-                <ion-item>
-                    <ion-thumbnail item-start>
-                      <img src="images/disha.jpg" style="border-radius:50%">
-                    </ion-thumbnail>
-                    <h2>Disha</h2>
-                    <ion-badge item-end>2</ion-badge>
-                  </ion-item>
-         
+
+          <ion-item-sliding *ngFor="let key of filteredusers">
+            <ion-item >
+           <ion-thumbnail item-start>
+            <img src="{{key.photoURL}}" style="border-radius:50%">
+           </ion-thumbnail>
+            <h2>{{key.name}}</h2>
+          </ion-item>
+         <ion-item-options slide="left">
+           <button ion-button color="primary" (click)="sendreq(key)">
+            <ion-icon name="person-add"></ion-icon>
+            リクエストを送る
+           </button>
+         </ion-item-options>
+       </ion-item-sliding>
         </ion-list>
-      
+
         <ion-list *ngSwitchCase="'chat'">
+          <ion-list-header>people who request you</ion-list-header>
+          <ion-item-sliding  *ngFor="let item of myrequests">
             <ion-item>
                 <ion-thumbnail item-start>
-                  <img src="images/disha.jpg" style="border-radius:50%">
+                  <img src="{{item.photoURL}}" style="border-radius:50%">
                 </ion-thumbnail>
-                <h2>Disha</h2>
-                <ion-badge item-end>2</ion-badge>
+                <h2>{{item.name}}</h2>
               </ion-item>
-              <ion-item>
-                  <ion-thumbnail item-start>
-                    <img src="images/disha.jpg" style="border-radius:50%">
-                  </ion-thumbnail>
-                  <h2>Disha</h2>
-                  <ion-badge item-end>2</ion-badge>
-                </ion-item>
-                <ion-item>
-                    <ion-thumbnail item-start>
-                      <img src="images/disha.jpg" style="border-radius:50%">
-                    </ion-thumbnail>
-                    <h2>Disha</h2>
-                    <ion-badge item-end>2</ion-badge>
-                  </ion-item>
-                  <ion-item>
-                      <ion-thumbnail item-start>
-                        <img src="images/disha.jpg" style="border-radius:50%">
-                      </ion-thumbnail>
-                      <h2>Disha</h2>
-                      <ion-badge item-end>2</ion-badge>
-                    </ion-item>
-                    <ion-item>
-                        <ion-thumbnail item-start>
-                          <img src="images/disha.jpg" style="border-radius:50%">
-                        </ion-thumbnail>
-                        <h2>Disha</h2>
-                        <ion-badge item-end>2</ion-badge>
-                      </ion-item>
-       
+            <ion-item-options>
+              <button ion-button color="secondary" (click)="accept(item)">
+                <ion-icon name="checkmark"></ion-icon>
+              承認する
+              </button>
+              <button ion-button color="danger" (click)="ignore(item)">
+          <ion-icon name="trash"></ion-icon>
+          無視する
+        </button>
+      </ion-item-options>
+    </ion-item-sliding>
+
         </ion-list>
+
+
         <ion-list *ngSwitchCase="'star'">
-            <ion-item>
-                <ion-thumbnail item-start>
-                  <img src="images/disha.jpg" style="border-radius:50%">
-                </ion-thumbnail>
-                <h2>Disha</h2>
-                <ion-badge item-end>2</ion-badge>
-              </ion-item>
-              <ion-item>
-                  <ion-thumbnail item-start>
-                    <img src="images/disha.jpg" style="border-radius:50%">
-                  </ion-thumbnail>
-                  <h2>Disha</h2>
-                  <ion-badge item-end>2</ion-badge>
-                </ion-item>
-                <ion-item>
-                    <ion-thumbnail item-start>
-                      <img src="images/disha.jpg" style="border-radius:50%">
-                    </ion-thumbnail>
-                    <h2>Disha</h2>
-                    <ion-badge item-end>2</ion-badge>
-                  </ion-item>
-                  <ion-item>
-                      <ion-thumbnail item-start>
-                        <img src="images/disha.jpg" style="border-radius:50%">
-                      </ion-thumbnail>
-                      <h2>Disha</h2>
-                      <ion-badge item-end>2</ion-badge>
-                    </ion-item>
-                    <ion-item>
-                        <ion-thumbnail item-start>
-                          <img src="images/disha.jpg" style="border-radius:50%">
-                        </ion-thumbnail>
-                        <h2>Disha</h2>
-                        <ion-badge item-end>2</ion-badge>
-                      </ion-item>
-         
+          <ion-list-header>Friends who can chat</ion-list-header>
+          <ion-item  *ngFor="let item of myfriends" (click)="buddychat(item)">
+            <ion-thumbnail item-start>
+              <img src="{{item.photoURL}}" style="border-radius:50%">
+            </ion-thumbnail>
+            <h2>{{item.name}}</h2> <br>
+            <p>This is text message</p>
+          </ion-item>
+
           </ion-list>
       </div>
 </ion-content>

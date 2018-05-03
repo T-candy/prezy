@@ -26,7 +26,7 @@
 </ion-header>
 
 <ion-content padding>
-  <div swing-stack #myswing1 [stackConfig]="stackConfig" (throwoutleft)="voteUp(false)" (throwoutright)="voteUp(true)" id="card-stack">
+  <!-- <div swing-stack #myswing1 [stackConfig]="stackConfig" (throwoutleft)="voteUp(false)" (throwoutright)="voteUp(true)" id="card-stack">
     <ion-card #mycards1 swing-card *ngFor="let card of cards" class="td-card">
   <p text-center *ngIf="card.picture">
     <img *ngIf="card.picture" [src]="card.picture.large" style="min-height:100%;max-width:90%;border-radius:0%;margin:0 auto;height:200px;width:200px;box-shadow: 2px 3px 5px grey;">
@@ -34,6 +34,18 @@
   <ion-card-content>
   <ion-card-title text-center>{{ card.name.first }} {{ card.name.last }}</ion-card-title>
   <p>株式会社Prezyの代表をしてます。前職では、Googleで人工知能の研究をしていました。</p>
+</ion-card-content>
+</ion-card>
+</div> -->
+
+<div swing-stack #myswing1 [stackConfig]="stackConfig" (throwoutleft)="voteUp(false)" (throwoutright)="voteUp(true)" id="card-stack">
+  <ion-card #mycards1 swing-card *ngFor="let key of cards" class="td-card">
+<p text-center *ngIf="key.photoURL">
+  <img *ngIf="key.photoURL" [src]="key.photoURL" style="min-height:100%;max-width:90%;border-radius:0%;margin:0 auto;height:200px;width:200px;box-shadow: 2px 3px 5px grey;">
+</p>
+<ion-card-content>
+<ion-card-title text-center>{{ key.name }}</ion-card-title>
+<p>{{key.intro}}</p>
 </ion-card-content>
 </ion-card>
 </div>

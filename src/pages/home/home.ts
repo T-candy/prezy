@@ -21,6 +21,7 @@ import { isEmpty } from 'rxjs/operator/isEmpty';
 
 import { AngularFireAuth } from 'angularfire2/auth';
 import * as firebase from 'firebase/app';
+import { UserProvider } from '../../providers/user/user';
 
 @Component({
   selector: 'page-home',
@@ -34,6 +35,8 @@ export class HomePage {
   stackConfig: StackConfig;
   recentCard: string = '';
 
+  firedata = firebase.database().ref('/users');
+
   provider = {
     loggedin: false,
     name: '',
@@ -41,12 +44,23 @@ export class HomePage {
     profilePic: '',
     intro: '',
     affiliation: '',
-    industry: ''
+    skill: '',
+    school:{
+      name: '',
+      department: '',
+      graduation: ''
+    },
+    company: {
+      name: '',
+      position: '',
+      category: ''
+    }
   }
 
   constructor(
     public navCtrl: NavController,
     public navParams: NavParams,
+    public userservice: UserProvider,
     private http: Http) {
     this.stackConfig = {
       // スワイプの方向とかもろもろ
@@ -60,14 +74,27 @@ export class HomePage {
         return 300;
       }
     };
+  }
 
-    this.provider.loggedin = this.navParams.get('loggedin');
-    this.provider.name = this.navParams.get('name');
-    this.provider.email = this.navParams.get('email');
-    this.provider.profilePic = this.navParams.get('profilePic');
-    this.provider.intro = this.navParams.get('intro');
-    this.provider.affiliation = this.navParams.get('affiliation');
-    this.provider.industry = this.navParams.get('industry');
+  ionViewWillEnter() {
+    this.loaduserdetails();
+  }
+
+  loaduserdetails() {
+    this.userservice.getuserdetails().then((res: any) => {
+      this.provider.name = res.name;
+      this.provider.email = res.email;
+      this.provider.profilePic = res.photoURL;
+      this.provider.intro = res.intro;
+      this.provider.affiliation = res.affiliation;
+      this.provider.skill = res.skill;
+      this.provider.school.name = res.school.name;
+      this.provider.school.department = res.school.department;
+      this.provider.school.graduation = res.school.graduation;
+      this.provider.company.name = res.company.name;
+      this.provider.company.position = res.company.position;
+      this.provider.company.category = res.company.category;
+    })
   }
 
   ngAfterViewInit() {
@@ -102,23 +129,36 @@ export class HomePage {
     this.addNewCards(1);
     if (like) {
       // this.toastCtrl.create('You liked: ' + removedCard.email);
-      console.log('You liked: ' + removedCard.name.first+' '+removedCard.name.last);
+      console.log('You liked: ' + removedCard.name+' '+removedCard.email);
     } else {
       // this.toastCtrl.create('You disliked: ' + removedCard.email);
-      console.log('You disliked: ' + removedCard.name.first+' '+removedCard.name.last);
+      console.log('You disliked: ' + removedCard.name+' '+removedCard.email);
     }
   }
 
   // Add new cards to our array
-  addNewCards(count: number) {
-  this.http.get('https://randomuser.me/api/?results=' + count)
-.map(data => data.json().results)
-.subscribe(result => {
-  for (let val of result) {
-    this.cards.push(val);
-  }
-})
-  }
+//   addNewCards(count: number) {
+//   this.http.get('https://randomuser.me/api/?results=' + count)
+// .map(data => data.json().results).subscribe(result => {
+//   for (let val of result) {
+//     this.cards.push(val);
+//   }
+// })
+// }
+
+// データベースに保存されているユーザーをrandom表示
+addNewCards(count: number) {
+  this.firedata.on('value', (snapshot) => {
+    var ids = [];
+    let userdata = snapshot.val();
+    for (var key in userdata) {
+      ids.push(userdata[key]);
+    }
+    var id = ids[Math.floor(Math.random()*ids.length)];
+    console.log(id);
+    this.cards.push(id);
+  })
+}
 
   // http://stackoverflow.com/questions/57803/how-to-convert-decimal-to-hex-in-javascript
   decimalToHex(d, padding) {
@@ -133,9 +173,8 @@ export class HomePage {
   }
 
   prof(){
-    {
-      this.navCtrl.push(ProfilePage,  this.provider);
-      }
+    this.provider.loggedin = true;
+    this.navCtrl.push(ProfilePage,  this.provider);
   }
   chatm(){
     this.navCtrl.push(ChatmainPage)

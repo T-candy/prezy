@@ -51,8 +51,8 @@ export class UserProvider {
           }).then(() => {
               firebase.database().ref('/users/' + firebase.auth().currentUser.uid).update({
               displayName: this.afireauth.auth.currentUser.displayName,
-              photoURL: imageurl,
-              uid: firebase.auth().currentUser.uid
+              photoURL: imageurl
+              // uid: firebase.auth().currentUser.uid
               }).then(() => {
                   resolve({ success: true });
                   }).catch((err) => {
@@ -65,6 +65,7 @@ export class UserProvider {
       return promise;
   }
 
+// プロフィール編集
   updatedetail(provider){
     var promise = new Promise((resolve, reject) => {
       provider.loggedin = true;
@@ -74,6 +75,7 @@ export class UserProvider {
         }).then(() => {
             firebase.database().ref('/users/' + firebase.auth().currentUser.uid).update({
             name: this.afireauth.auth.currentUser.displayName,
+            email: this.afireauth.auth.currentUser.email,
             intro: provider.intro,
             affiliation: provider.affiliation,
             skill: provider.skill,
@@ -92,12 +94,30 @@ export class UserProvider {
     return promise;
   }
 
+// ログインユーザーの情報を取得
 getuserdetails() {
     var promise = new Promise((resolve, reject) => {
     this.firedata.child(firebase.auth().currentUser.uid).once('value', (snapshot) => {
       resolve(snapshot.val());
     }).catch((err) => {
       reject(err);
+      })
+    })
+    return promise;
+  }
+
+// すべてのユーザー情報を取得
+  getallusers() {
+    var promise = new Promise((resolve, reject) => {
+      this.firedata.orderByChild('uid').once('value', (snapshot) => {
+        let userdata = snapshot.val();
+        let temparr = [];
+        for (var key in userdata) {
+          temparr.push(userdata[key]);
+        }
+        resolve(temparr);
+      }).catch((err) => {
+        reject(err);
       })
     })
     return promise;
