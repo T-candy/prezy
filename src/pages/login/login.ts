@@ -31,7 +31,7 @@ export class LoginPage {
     loggedin: false,
     name: '',
     email: '',
-    profilePic: '',
+    photoURL: '',
     intro: '',
     affiliation: '',
     skill: '',
@@ -101,25 +101,24 @@ export class LoginPage {
     var promise = new Promise((resolve, reject) => {
       this.afAuth.auth.signInWithPopup(new firebase.auth.FacebookAuthProvider()).then(res => {
         this.provider.loggedin = true;
-        this.provider.name = res.user.displayName;
-        this.provider.email = res.user.email;
+        // this.provider.name = res.user.displayName;
+        // this.provider.email = res.user.email;
         if (res.user.photoURL == null ) {
-          this.provider.profilePic = 'https://firebasestorage.googleapis.com/v0/b/myapp-4eadd.appspot.com/o/chatterplace.png?alt=media&token=e51fa887-bfc6-48ff-87c6-e2c61976534e';
+          this.provider.photoURL = 'https://firebasestorage.googleapis.com/v0/b/myapp-4eadd.appspot.com/o/chatterplace.png?alt=media&token=e51fa887-bfc6-48ff-87c6-e2c61976534e';
         } else {
-          this.provider.profilePic = res.user.photoURL;
+          this.provider.photoURL = res.user.photoURL;
         }
         console.log(res);
         this.afAuth.auth.currentUser.updateProfile({
           displayName : res.user.displayName,
-  		    // email : res.user.email,
-  		    photoURL : res.user.photoURL
+  		    photoURL : this.provider.photoURL
         }).then(() => {
           this.firedata.child(this.afAuth.auth.currentUser.uid).set({
             uid: this.afAuth.auth.currentUser.uid,
             name: this.afAuth.auth.currentUser.displayName,
             email: this.afAuth.auth.currentUser.email,
-            // photoURL: this.afAuth.auth.currentUser.photoURL,
-            photoURL: this.provider.profilePic,
+            photoURL: this.afAuth.auth.currentUser.photoURL,
+            // photoURL: this.provider.photoURL,
             intro: '',
             affiliation: '',
             skill: '',
@@ -155,6 +154,10 @@ export class LoginPage {
     title: 'Login',
     inputs: [
       {
+        name: 'name',
+        placeholder: 'name'
+      },
+      {
         name: 'email',
         placeholder: 'email'
       },
@@ -175,16 +178,16 @@ export class LoginPage {
       {
         text: 'Login',
         handler: data => {
-            this.credentials.email = data.email;
-            this.credentials.password = data.password;
+          this.credentials.name = data.name;
+          this.credentials.email = data.email;
+          this.credentials.password = data.password;
             this.authservice.login(this.credentials).then((res: any) => {
                   if (!res.code) {
+                    console.log(res);
                     this.provider.loggedin = true;
-                    this.provider.name = this.credentials.email;
-                    this.provider.profilePic = 'images/kao1.jpg';
+                    this.provider.photoURL = 'images/kao1.jpg';
                     this.navCtrl.setRoot(HomePage, this.provider);
                   } else {
-                    // alert(res);
                     console.log(res);
                 }
               })

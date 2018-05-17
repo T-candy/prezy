@@ -1,12 +1,14 @@
 import { Component, NgZone } from '@angular/core';
 import { IonicPage, NavController, NavParams } from 'ionic-angular';
-import { ModalController } from 'ionic-angular';
 import { AngularFireAuth } from 'angularfire2/auth';
 import { UserProvider } from '../../providers/user/user';
 
 import { LoginPage } from '../login/login';
 import { HomePage } from '../home/home';
 import { PhotoPage } from '../photo/photo';
+import { ChatmainPage } from '../chatmain/chatmain';
+
+import firebase from 'firebase';
 
 /**
  * Generated class for the ProfilePage page.
@@ -22,35 +24,18 @@ import { PhotoPage } from '../photo/photo';
 })
 export class ProfilePage {
 
-  provider = {
-    loggedin: false,
-    name: '',
-    email: '',
-    profilePic: '',
-    intro: '',
-    affiliation: '',
-    skill: '',
-    school:{
-      name: '',
-      department: '',
-      graduation: ''
-    },
-    company: {
-      name: '',
-      position: '',
-      category: ''
-    }
-  }
+  provider:any;
 
   constructor(
     public navCtrl: NavController,
     public navParams: NavParams,
     public zone: NgZone,
-    public modalCtrl: ModalController,
     public userservice: UserProvider,
     private afAuth: AngularFireAuth
   ) {
-    this.provider.loggedin = this.navParams.get('loggedin');
+    this.userservice.getuserdetails().then((res: any) => {
+      this.provider = res;
+    })
   }
 
   ionViewDidLoad() {
@@ -58,36 +43,26 @@ export class ProfilePage {
     console.log(this.provider);
   }
 
-  ionViewWillEnter() {
-    this.loaduserdetails();
-  }
-
-  loaduserdetails() {
-    this.userservice.getuserdetails().then((res: any) => {
-      this.provider.name = res.name;
-      this.provider.email = res.email;
-      this.provider.profilePic = res.photoURL;
-      this.provider.intro = res.intro;
-      this.provider.affiliation = res.affiliation;
-      this.provider.skill = res.skill;
-      this.provider.school.name = res.school.name;
-      this.provider.school.department = res.school.department;
-      this.provider.school.graduation = res.school.graduation;
-      this.provider.company.name = res.company.name;
-      this.provider.company.position = res.company.position;
-      this.provider.company.category = res.company.category;
-      // this.zone.run(() => {
-      //   this.provider.profilePic = res.photoURL;
-      // })
-    })
-  }
-
   presentModal() {
-    let modal = this.modalCtrl.create(HomePage, this.provider);
-    modal.present();
+    this.navCtrl.push(HomePage, this.provider)
   }
+
+  logout() {
+    firebase.auth().signOut().then(() => {
+          this.navCtrl.parent.parent.setRoot(LoginPage);
+        })
+    }
 
   pho(){
-    this.navCtrl.push(PhotoPage, this.provider)
+    this.navCtrl.setRoot(PhotoPage, this.provider)
+  }
+
+  home(){
+    this.navCtrl.setRoot(HomePage, this.provider)
+  }
+
+  chatm(){
+    this.provider.loggedin = true;
+    this.navCtrl.push(ChatmainPage, this.provider)
   }
 }

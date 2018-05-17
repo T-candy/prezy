@@ -1,19 +1,13 @@
 import { Component,ViewChild, ViewChildren, QueryList } from '@angular/core';
-import { NavController, NavParams } from 'ionic-angular';
+import { NavController, NavParams, Events } from 'ionic-angular';
 import { ProfilePage } from '../profile/profile';
 import { ChatmainPage } from '../chatmain/chatmain';
 import { ChatindPage } from '../chatind/chatind';
-// import { PhotoPage } from '../photo/photo';
+import { MatchPage } from '../match/match';
 import { LoginPage } from '../login/login';
 
-import {
-  StackConfig,
-  Stack,
-  Card,
-  ThrowEvent,
-  DragEvent,
-  SwingStackComponent,
-  SwingCardComponent} from 'angular2-swing';
+import {StackConfig, Stack, Card, ThrowEvent, DragEvent,
+  SwingStackComponent, SwingCardComponent} from 'angular2-swing';
 import { Http } from '@angular/http';
 import 'rxjs/Rx';
 import { empty } from 'rxjs/observable/empty';
@@ -22,6 +16,9 @@ import { isEmpty } from 'rxjs/operator/isEmpty';
 import { AngularFireAuth } from 'angularfire2/auth';
 import * as firebase from 'firebase/app';
 import { UserProvider } from '../../providers/user/user';
+import { RequestsProvider } from '../../providers/requests/requests';
+import { ChatProvider } from '../../providers/chat/chat';
+import { connreq } from '../../models/interfaces/request';
 
 @Component({
   selector: 'page-home',
@@ -37,11 +34,17 @@ export class HomePage {
 
   firedata = firebase.database().ref('/users');
 
+  temparr = [];
+  filteredusers = [];
+  newrequest = {} as connreq;
+  myrequests;
+  myfriends;
+
   provider = {
     loggedin: false,
     name: '',
     email: '',
-    profilePic: '',
+    photoURL: '',
     intro: '',
     affiliation: '',
     skill: '',
@@ -61,6 +64,9 @@ export class HomePage {
     public navCtrl: NavController,
     public navParams: NavParams,
     public userservice: UserProvider,
+    public requestservice: RequestsProvider,
+    public chatservice: ChatProvider,
+    public events: Events,
     private http: Http) {
     this.stackConfig = {
       // スワイプの方向とかもろもろ
@@ -74,17 +80,34 @@ export class HomePage {
         return 300;
       }
     };
+
+    this.userservice.getallusers().then((res: any) => {
+      this.filteredusers = res;
+      this.temparr = res;
+   })
   }
 
   ionViewWillEnter() {
     this.loaduserdetails();
+
+    this.requestservice.getmyrequests();
+    this.requestservice.getmyfriends();
+    this.myfriends = [];
+    this.events.subscribe('gotrequests', () => {
+      this.myrequests = [];
+      this.myrequests = this.requestservice.userdetails;
+    })
+    this.events.subscribe('friends', () => {
+      this.myfriends = [];
+      this.myfriends = this.requestservice.myfriends;
+    })
   }
 
   loaduserdetails() {
     this.userservice.getuserdetails().then((res: any) => {
       this.provider.name = res.name;
       this.provider.email = res.email;
-      this.provider.profilePic = res.photoURL;
+      this.provider.photoURL = res.photoURL;
       this.provider.intro = res.intro;
       this.provider.affiliation = res.affiliation;
       this.provider.skill = res.skill;
@@ -95,6 +118,11 @@ export class HomePage {
       this.provider.company.position = res.company.position;
       this.provider.company.category = res.company.category;
     })
+  }
+
+  ionViewDidLeave() {
+    this.events.unsubscribe('gotrequests');
+    this.events.unsubscribe('friends');
   }
 
   ngAfterViewInit() {
@@ -129,6 +157,7 @@ export class HomePage {
     this.addNewCards(1);
     if (like) {
       // this.toastCtrl.create('You liked: ' + removedCard.email);
+      this.sendreq(this.cards);
       console.log('You liked: ' + removedCard.name+' '+removedCard.email);
     } else {
       // this.toastCtrl.create('You disliked: ' + removedCard.email);
@@ -146,12 +175,13 @@ export class HomePage {
 // })
 // }
 
-// データベースに保存されているユーザーをrandom表示
+// データベースに保存されている自分以外のユーザーをrandom表示
 addNewCards(count: number) {
   this.firedata.on('value', (snapshot) => {
     var ids = [];
     let userdata = snapshot.val();
     for (var key in userdata) {
+      if (key != firebase.auth().currentUser.uid)
       ids.push(userdata[key]);
     }
     var id = ids[Math.floor(Math.random()*ids.length)];
@@ -168,16 +198,39 @@ addNewCards(count: number) {
     while (hex.length < numPadding) {
       hex = '0' + hex;
     }
-
     return hex;
   }
 
+  // リクエストを送る
+    sendreq(recipient) {
+     this.newrequest.sender = firebase.auth().currentUser.uid;
+     this.newrequest.recipient = recipient.uid;
+     if (this.newrequest.sender === this.newrequest.recipient) //自分のとき
+       alert('永遠の友人とは、己のこと。');
+       else if (this.newrequest.recipient === this.myrequests.uid) {
+         console.log('許可する');
+       } //リクエストもらっている
+       // else if () {} //既に送信済み
+       else {
+       this.requestservice.sendrequest(this.newrequest).then((res: any) => {
+         if (res.success) {
+           let sentuser = this.filteredusers.indexOf(recipient);
+           this.filteredusers.splice(sentuser, 1);
+         }
+       }).catch((err) => {
+         console.log(recipient);
+         console.log(err);
+       })
+     }
+   }
+
   prof(){
-    this.provider.loggedin = true;
+    // this.provider.loggedin = true;
     this.navCtrl.push(ProfilePage,  this.provider);
   }
   chatm(){
-    this.navCtrl.push(ChatmainPage)
+    // this.provider.loggedin = true;
+    this.navCtrl.push(ChatmainPage, this.provider)
   }
   chatid(){
     this.navCtrl.push(ChatindPage)

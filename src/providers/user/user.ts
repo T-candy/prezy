@@ -12,6 +12,8 @@ import firebase from 'firebase';
 @Injectable()
 export class UserProvider {
   firedata = firebase.database().ref('/users');
+  firestore = firebase.storage();
+  provider:any;
 
   constructor(public afireauth: AngularFireAuth) {
   }
@@ -43,23 +45,30 @@ export class UserProvider {
   //   return promise;
   // }
 
-  updateimage(imageurl) {
+  updateimage(uploadedurl) {
       var promise = new Promise((resolve, reject) => {
           this.afireauth.auth.currentUser.updateProfile({
               displayName: this.afireauth.auth.currentUser.displayName,
-              photoURL: imageurl
+              photoURL: ''
           }).then(() => {
-              firebase.database().ref('/users/' + firebase.auth().currentUser.uid).update({
-              displayName: this.afireauth.auth.currentUser.displayName,
-              photoURL: imageurl
+              this.firedata.child(firebase.auth().currentUser.uid).update({
+              name: this.afireauth.auth.currentUser.displayName,
+              photoURL: uploadedurl
               // uid: firebase.auth().currentUser.uid
               }).then(() => {
-                  resolve({ success: true });
+              var filename = Math.floor(Date.now() / 1000);
+              var imagestore = this.firestore.ref('/images').child(firebase.auth().currentUser.uid).child(`profileimage/${filename}.jpg`);
+              imagestore.putString(uploadedurl, firebase.storage.StringFormat.DATA_URL).then((res) => {
+                resolve({ success: true });
+                console.log('Uploaded a blob or file!');
+              })
                   }).catch((err) => {
                       reject(err);
+                      console.log(err);
                   })
           }).catch((err) => {
                 reject(err);
+                console.log(err);
              })
       })
       return promise;
@@ -113,6 +122,7 @@ getuserdetails() {
         let userdata = snapshot.val();
         let temparr = [];
         for (var key in userdata) {
+          if (key != firebase.auth().currentUser.uid)
           temparr.push(userdata[key]);
         }
         resolve(temparr);

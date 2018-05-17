@@ -64,7 +64,6 @@ export class RequestsProvider {
           }
         this.events.publish('gotrequests');
       })
-
   })
 }
 
@@ -89,7 +88,6 @@ getmyfriends() {
       }).catch((err) => {
         alert(err);
       })
-
     })
   }
 
@@ -105,8 +103,7 @@ acceptrequest(buddy){
           this.deleterequest(buddy).then(() => {
           resolve(true);
         })
-
-        }).catch((err) => {
+      }).catch((err) => {
           reject(err);
          })
         }).catch((err) => {

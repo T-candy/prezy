@@ -28,27 +28,34 @@ export class AuthProvider {
   login(credentials: usercreds) {
     var promise = new Promise((resolve, reject) => {
       this.afireauth.auth.signInWithEmailAndPassword(credentials.email, credentials.password).then(() => {
-        this.firedata.child(this.afireauth.auth.currentUser.uid).set({
-            uid: this.afireauth.auth.currentUser.uid,
-            name: this.afireauth.auth.currentUser.email,
-            email: this.afireauth.auth.currentUser.email,
-            photoURL: 'images/kao.jpg',
-            intro : '私は神です。',
-            affiliation : '',
-            skill : '',
-            school:{
-              name: '',
-              department: '',
-              graduation: ''
-            },
-            company: {
-              name: '',
-              position: '',
-              category: ''
-            }
-          }).then(() => {
-            resolve(true);
-          })
+        this.afireauth.auth.currentUser.updateProfile({
+          displayName : credentials.name,
+          photoURL : ''
+        }).then(() => {
+          this.firedata.child(this.afireauth.auth.currentUser.uid).set({
+              uid: this.afireauth.auth.currentUser.uid,
+              name: credentials.name,
+              email: this.afireauth.auth.currentUser.email,
+              photoURL: 'images/kao.jpg',
+              intro : '私は神です。',
+              affiliation : '',
+              skill : '',
+              school:{
+                name: '',
+                department: '',
+                graduation: ''
+              },
+              company: {
+                name: '',
+                position: '',
+                category: ''
+              }
+            }).then(() => {
+              resolve(true);
+            })
+        }).catch((err) => {
+          reject(err);
+        })
       }).catch((err) => {
         reject(err);
        })

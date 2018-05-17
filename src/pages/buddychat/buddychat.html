@@ -1,18 +1,70 @@
-<!--
-  Generated template for the BuddychatPage page.
-
-  See http://ionicframework.com/docs/components/#navigation for more info on
-  Ionic pages and navigation.
--->
 <ion-header>
 
   <ion-navbar>
-    <ion-title>buddychat</ion-title>
+  <ion-row>
+      <ion-col>
+          <img src="{{buddy.photoURL}}" style="width:60px;height:60px;border-radius:50%">
+      </ion-col>
+      <ion-col style="margin-top:15px">
+        {{buddy.name}}
+      </ion-col>
+      <ion-col text-right>
+        <button ion-button icon-only clear>
+            <ion-icon name="more"></ion-icon>
+        </button>
+      </ion-col>
+  </ion-row>
   </ion-navbar>
-
 </ion-header>
 
+<ion-content #content>
+  <ion-row style="margin-top:5px" *ngFor = "let item of allmessages; let i = index" text-wrap>
+    <ion-col col-3>
+      &nbsp;
+    </ion-col>
+    <ion-col col-7 style="background-color:green; min-height:50px;border-radius:10px;" *ngIf="item.sentby === buddy.uid">
+      <p style=" padding:5px; color:white">{{item.message}}</p>
+    </ion-col>
+    <ion-col text-right style="margin-top: 12px" *ngIf="item.sentby === buddy.uid">
+        <img src="{{buddy.photoURL}}" style="width:50px;height:50px;border-radius:50%">
+    </ion-col>
+  </ion-row>
 
-<ion-content padding>
+  <ion-row style="margin-top:5px" *ngFor = "let item of allmessages; let i = index" text-wrap>
+      <ion-col text-left style="margin-top: 12px" *ngIf="item.sentby != buddy.uid">
+          <img src="{{provider.photoURL}}" style="width:50px;height:50px;border-radius:50%">
+      </ion-col>
+      <ion-col col-7  style="background-color:#d3d3d3; min-height:50px;border-radius:10px;" *ngIf="item.sentby != buddy.uid">
+        <p style="padding:5px; color:black">{{item.message}}</p>
+      </ion-col>
+      <ion-col col-3>
+          &nbsp;
+        </ion-col>
+    </ion-row>
+  </ion-content>
 
-</ion-content>
+        <ion-footer ion-fixed>
+            <ion-toolbar>
+              <ion-row>
+              <ion-col col-1>
+                  <p>
+                      <button ion-button icon-right icon-only clear color="dark">
+                        <ion-icon name="camera"></ion-icon>
+                      </button>
+                    </p>
+              </ion-col>
+              <ion-col col-9>
+                  <ion-item style="margin-top:15px; margin-left:18px">
+                      <ion-input type="text" [(ngModel)]="newmessage"></ion-input>
+                    </ion-item>
+              </ion-col>
+              <ion-col col-1>
+                  <p text-right>
+                      <button ion-button icon-right icon-only clear color="dark" (click)="addmessage()">
+                        <ion-icon name="send"></ion-icon>
+                      </button>
+                    </p>
+            </ion-col>
+          </ion-row>
+        </ion-toolbar>
+       </ion-footer>

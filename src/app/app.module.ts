@@ -21,6 +21,7 @@ import { SwingModule } from 'angular2-swing';
 import { File } from '@ionic-native/file';
 import { FileChooser } from '@ionic-native/file-chooser';
 import { FilePath } from '@ionic-native/file-path';
+import { Camera } from '@ionic-native/camera';
 
 import { HomePage } from '../pages/home/home';
 import { ProfilePage } from '../pages/profile/profile';
@@ -79,6 +80,7 @@ import { ChatProvider } from '../providers/chat/chat';
     File,
     FileChooser,
     FilePath,
+    Camera,
     RequestsProvider,
     ChatProvider
   ]

@@ -2,7 +2,9 @@ import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams, Events, AlertController  } from 'ionic-angular';
 import { UserProvider } from '../../providers/user/user';
 import { RequestsProvider } from '../../providers/requests/requests';
+import { ChatProvider } from '../../providers/chat/chat';
 import { connreq } from '../../models/interfaces/request';
+import { MatchPage } from '../match/match';
 import firebase from 'firebase';
 
 /**
@@ -26,21 +28,31 @@ export class ChatmainPage {
   myrequests;
   myfriends;
 
+  provider:any;
+
   constructor(
     public navCtrl: NavController,
     public navParams: NavParams,
     public alertCtrl: AlertController,
     public userservice: UserProvider,
     public requestservice: RequestsProvider,
+    public chatservice: ChatProvider,
     public events: Events ) {
     this.userservice.getallusers().then((res: any) => {
       this.filteredusers = res;
       this.temparr = res;
    })
+   this.userservice.getuserdetails().then((res: any) => {
+     this.provider = res;
+   })
  }
 
   ionViewDidLoad() {
     console.log('ionViewDidLoad ChatmainPage');
+    console.log(this.filteredusers);
+    console.log(this.provider);
+    console.log(this.myfriends);
+    console.log(this.myrequests);
   }
 
 // リクエスト情報を読み込む
@@ -92,13 +104,15 @@ export class ChatmainPage {
 // リクエストを承認
  accept(item) {
     this.requestservice.acceptrequest(item).then(() => {
-      let newalert = this.alertCtrl.create({
-        title: 'Friend added',
-        subTitle: 'Tap on the friend to chat with him',
-        buttons: ['Okay']
-      });
-      newalert.present();
+      // let newalert = this.alertCtrl.create({
+      //   title: 'Friend added',
+      //   subTitle: 'Tap on the friend to chat with him',
+      //   buttons: ['Okay']
+      // });
+      // newalert.present();
+      this.navCtrl.setRoot(MatchPage, item);
     })
+    this.chatservice.initializebuddy(item);
   }
 
   // リクエストを無視
@@ -108,6 +122,11 @@ export class ChatmainPage {
     }).catch((err) => {
       alert(err);
     })
+  }
+
+  buddychat(buddy) {
+    this.chatservice.initializebuddy(buddy);
+    this.navCtrl.push('BuddychatPage');
   }
 
 }

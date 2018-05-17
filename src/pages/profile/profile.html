@@ -2,21 +2,25 @@
     <ion-navbar style="min-height:80px">
      <ion-grid>
        <ion-row>
-          <ion-col *ngIf="provider.loggedin">
-              <img src="{{ provider.profilePic }}" style="width:60px;height:60px;border-radius:50%">
+          <ion-col>
+              <img src="{{ provider.photoURL }}" style="width:60px;height:60px;border-radius:50%">
           </ion-col>
-          <ion-col style="margin-top:10px">
-              <div class="can-toggle" >
+          <ion-col>
+              <!-- <div class="can-toggle" >
                 <div class="can-toggle demo-rebrand-2" >
                       <input id="e" type="checkbox" >
                       <label for="e">
                         <div class="can-toggle__switch" data-checked="On" data-unchecked="No" style="max-width:150px; max-height:50px"></div>
                       </label>
                     </div>
-                    </div>
-                  </ion-col>
-          <ion-col text-right style="margin-top:-5px">
-            <button ion-button icon-only large clear color="dark">
+                    </div> -->
+
+                    <button ion-button icon-only large clear color="dark" (click)="home()">
+                      <ion-icon name="md-people"></ion-icon>
+                    </button>
+                </ion-col>
+          <ion-col text-right>
+            <button ion-button icon-only large clear color="dark" (click)="chatm()">
               <ion-icon name="ios-text"></ion-icon>
             </button>
           </ion-col>
@@ -26,10 +30,10 @@
   </ion-header>
 
 <ion-content padding>
-  <p text-center *ngIf="provider.loggedin">
-      <img src="{{provider.profilePic}}" style="width:150px;height:150px;border-radius:50%">
+  <p text-center>
+      <img src="{{provider.photoURL}}" style="width:150px;height:150px;border-radius:50%">
   </p>
-  <p text-center *ngIf="provider.loggedin">
+  <p text-center>
     {{provider.name}} <br>
    <span style="color:grey">{{provider.affiliation}}</span>
   </p>
@@ -98,7 +102,12 @@
   </ion-row>
 
   <h4 text-center>Share with Friends</h4>
-  <h5 text-center>Find match</h5>
+  <p text-center>
+    <button ion-button full color="light" (click)="logout()" style="border-radius:40px;">
+      logout
+    </button>
+  </p>
+
   <p text-center>
   <button ion-button full (click)="presentModal()" style="border-radius:40px; background: linear-gradient(to right, #3A1C71 , #D76D77, #FFAF7B);">
     Share

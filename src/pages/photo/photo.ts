@@ -1,7 +1,7 @@
 import { HttpClient, HttpClientModule } from '@angular/common/http';
 import { Http, HttpModule } from '@angular/http';
 import { Component, NgZone } from '@angular/core';
-import { IonicPage, NavController, NavParams, LoadingController, AlertController } from 'ionic-angular';
+import { IonicPage, NavController, NavParams, LoadingController, AlertController, ActionSheetController  } from 'ionic-angular';
 import { ImghandlerProvider } from '../../providers/imghandler/imghandler';
 import { UserProvider } from '../../providers/user/user';
 import * as firebase from 'firebase/app';
@@ -21,27 +21,9 @@ import { ProfilePage } from '../profile/profile';
   templateUrl: 'photo.html',
 })
 export class PhotoPage {
-  imgurl = 'https://firebasestorage.googleapis.com/v0/b/myapp-4eadd.appspot.com/o/chatterplace.png?alt=media&token=e51fa887-bfc6-48ff-87c6-e2c61976534e';
   moveon = true;
 
-  provider = {
-    name: '',
-    email: '',
-    profilePic: '',
-    intro: '',
-    affiliation: '',
-    skill: '',
-    school:{
-      name: '',
-      department: '',
-      graduation: ''
-    },
-    company: {
-      name: '',
-      position: '',
-      category: ''
-    }
-  }
+  provider:any;
 
   testCheckboxOpen: boolean;
 
@@ -54,70 +36,94 @@ export class PhotoPage {
     public zone: NgZone,
     public userservice: UserProvider,
     public loadingCtrl: LoadingController,
-    public alertCtrl: AlertController
+    public alertCtrl: AlertController,
+    public actionSheetCtrl: ActionSheetController
   ) {
-    // this.provider.name = this.navParams.get('name');
-    // this.provider.email = this.navParams.get('email');
-    // this.provider.profilePic = this.navParams.get('profilePic');
-    // this.provider.intro = this.navParams.get('intro');
-    // this.provider.affiliation = this.navParams.get('affiliation');
-    // this.provider.skill = this.navParams.get('skill');
-    // this.provider.school.name = this.navParams.get('school.name');
-    // this.provider.school.department = this.navParams.get('school.department');
-    // this.provider.school.graduation = this.navParams.get('school.graduation');
-    // this.provider.company.name = this.navParams.get('company.name');
-    // this.provider.company.position = this.navParams.get('company.position');
-    // this.provider.company.category = this.navParams.get('company.category');
+    this.userservice.getuserdetails().then((res: any) => {
+      this.provider = res;
+    })
   }
 
   ionViewDidLoad() {
     console.log('ionViewDidLoad PhotoPage');
-  }
-
-  ionViewWillEnter() {
-    this.loaduserdetails();
-  }
-
-  loaduserdetails() {
-    this.userservice.getuserdetails().then((res: any) => {
-      this.provider.name = res.name;
-      this.provider.email = res.email;
-      this.provider.profilePic = res.photoURL;
-      this.provider.intro = res.intro;
-      this.provider.affiliation = res.affiliation;
-      this.provider.skill = res.skill;
-      this.provider.school.name = res.school.name;
-      this.provider.school.department = res.school.department;
-      this.provider.school.graduation = res.school.graduation;
-      this.provider.company.name = res.company.name;
-      this.provider.company.position = res.company.position;
-      this.provider.company.category = res.company.category;
-    })
+    console.log(this.provider);
   }
 
   chooseimage() {
-    let loader = this.loadingCtrl.create({
-      content: 'Please wait'
-    })
-    loader.present();
-    this.imgservice.uploadimage().then((uploadedurl: any) => {
-      loader.dismiss();
-      this.zone.run(() => {
-        this.imgurl = uploadedurl;
-        this.moveon = false;
-      })
-    })
+    let actionSheet = this.actionSheetCtrl.create({
+      title: '写真を変更する',
+      buttons: [
+        {
+          text: 'カメラを撮る',
+          role: 'destructive',
+          icon: 'camera',
+          handler: () => {
+            console.log('Destructive clicked');
+              let loader = this.loadingCtrl.create({
+                content: 'Please wait'
+              });
+              loader.present();
+              this.imgservice.picmsgstore().then((imgurl) => {
+                loader.dismiss();
+              }).catch((err) => {
+                alert(err);
+                loader.dismiss();
+              })
+          }
+        },{
+          text: 'ファイルから選択',
+          handler: () => {
+            console.log('ファイル clicked');
+            let loader = this.loadingCtrl.create({
+              content: 'Please wait'
+            })
+            loader.present();
+            this.imgservice.uploadimage().then((uploadedurl: any) => {
+              loader.dismiss();
+              console.log(uploadedurl);
+              this.zone.run(() => {
+                this.provider.photoURL = uploadedurl;
+                this.moveon = false;
+              })
+            })
+          }
+        },{
+          text: 'キャンセル',
+          role: 'cancel',
+          icon: 'close',
+          handler: () => {
+            console.log('Cancel clicked');
+          }
+        }
+      ]
+    });
+    actionSheet.present();
   }
 
-  updateproceed() {
-    let loader = this.loadingCtrl.create({
-      content: 'Please wait'
-    })
-    loader.present();
-    this.userservice.updateimage(this.imgurl).then((res: any) => {
-      loader.dismiss();
-    })
-  }
+  // chooseimage() {
+  //   let loader = this.loadingCtrl.create({
+  //     content: 'Please wait'
+  //   })
+  //   loader.present();
+  //   this.imgservice.uploadimage().then((uploadedurl: any) => {
+  //     loader.dismiss();
+  //     this.zone.run(() => {
+  //       this.imgurl = uploadedurl;
+  //       this.moveon = false;
+  //     })
+  //   })
+  // }
+
+// ボタン押してFirebaseに保存
+  // updateproceed() {
+  //   let loader = this.loadingCtrl.create({
+  //     content: 'Please wait'
+  //   })
+  //   loader.present();
+  //   this.userservice.updateimage(this.imgurl).then((res: any) => {
+  //     loader.dismiss();
+  //   })
+  // }
 
   proceed() {
     this.navCtrl.setRoot(ProfilePage, this.provider);
