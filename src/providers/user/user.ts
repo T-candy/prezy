@@ -18,6 +18,10 @@ export class UserProvider {
   constructor(public afireauth: AngularFireAuth) {
   }
 
+  ionViewDidLoad() {
+    console.log('ionViewDidLoad LoginPage');
+  }
+
   // メールで新規ユーザー登録
   // adduser(newuser) {
   //   var promise = new Promise((resolve, reject) => {
@@ -115,7 +119,7 @@ getuserdetails() {
     return promise;
   }
 
-// すべてのユーザー情報を取得
+// 自分以外のすべてのユーザー情報を取得
   getallusers() {
     var promise = new Promise((resolve, reject) => {
       this.firedata.orderByChild('uid').once('value', (snapshot) => {

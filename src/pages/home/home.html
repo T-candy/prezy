@@ -38,7 +38,7 @@
 </ion-card>
 </div> -->
 
-<div swing-stack #myswing1 [stackConfig]="stackConfig" (throwoutleft)="voteUp(false)" (throwoutright)="voteUp(true)" id="card-stack">
+<div swing-stack #myswing1 [stackConfig]="stackConfig" (throwoutleft)="voteUp(false)" (throwoutright)="voteUp(true)" (click)="userdetail()" id="card-stack">
   <ion-card #mycards1 swing-card *ngFor="let key of cards" class="td-card">
 <p text-center *ngIf="key.photoURL">
   <img *ngIf="key.photoURL" [src]="key.photoURL" style="min-height:100%;max-width:90%;border-radius:0%;margin:0 auto;height:200px;width:200px;box-shadow: 2px 3px 5px grey;">

@@ -1,5 +1,5 @@
-import { Component, Injectable } from '@angular/core';
-import { IonicPage, NavController, NavParams, AlertController } from 'ionic-angular';
+import { Component, Injectable, ViewChild } from '@angular/core';
+import { IonicPage, NavController, NavParams, AlertController, Slides } from 'ionic-angular';
 import { AngularFireAuth } from 'angularfire2/auth';
 import * as firebase from 'firebase/app';
 
@@ -24,6 +24,7 @@ import { ProfilePage } from '../profile/profile';
   templateUrl: 'login.html',
 })
 export class LoginPage {
+  @ViewChild(Slides) slider: Slides;
 
   firedata = firebase.database().ref('/users');
 
@@ -100,13 +101,13 @@ export class LoginPage {
   FBlogin(){
     var promise = new Promise((resolve, reject) => {
       this.afAuth.auth.signInWithPopup(new firebase.auth.FacebookAuthProvider()).then(res => {
-        this.provider.loggedin = true;
+      this.provider.loggedin = true;
         // this.provider.name = res.user.displayName;
         // this.provider.email = res.user.email;
         if (res.user.photoURL == null ) {
-          this.provider.photoURL = 'https://firebasestorage.googleapis.com/v0/b/myapp-4eadd.appspot.com/o/chatterplace.png?alt=media&token=e51fa887-bfc6-48ff-87c6-e2c61976534e';
+        this.provider.photoURL = 'https://firebasestorage.googleapis.com/v0/b/myapp-4eadd.appspot.com/o/chatterplace.png?alt=media&token=e51fa887-bfc6-48ff-87c6-e2c61976534e';
         } else {
-          this.provider.photoURL = res.user.photoURL;
+        this.provider.photoURL = res.user.photoURL;
         }
         console.log(res);
         this.afAuth.auth.currentUser.updateProfile({
@@ -185,7 +186,6 @@ export class LoginPage {
                   if (!res.code) {
                     console.log(res);
                     this.provider.loggedin = true;
-                    this.provider.photoURL = 'images/kao1.jpg';
                     this.navCtrl.setRoot(HomePage, this.provider);
                   } else {
                     console.log(res);

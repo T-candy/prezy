@@ -33,12 +33,13 @@ export class HomePage {
   recentCard: string = '';
 
   firedata = firebase.database().ref('/users');
-
-  temparr = [];
+  firereq = firebase.database().ref('/requests');
+  firefriends = firebase.database().ref('/friends');
   filteredusers = [];
   newrequest = {} as connreq;
   myrequests;
   myfriends;
+  myrequestsender;
 
   provider = {
     loggedin: false,
@@ -80,19 +81,23 @@ export class HomePage {
         return 300;
       }
     };
-
     this.userservice.getallusers().then((res: any) => {
       this.filteredusers = res;
-      this.temparr = res;
-   })
-  }
+    })
+ }
+
+ ionViewDidLoad() {
+   // this.loaduserdetails();
+   console.log('ionViewDidLoad HomePage');
+ }
 
   ionViewWillEnter() {
     this.loaduserdetails();
+    this.loadrequestdetails();
 
     this.requestservice.getmyrequests();
     this.requestservice.getmyfriends();
-    this.myfriends = [];
+    // this.requestservice.getmyrequestsender();
     this.events.subscribe('gotrequests', () => {
       this.myrequests = [];
       this.myrequests = this.requestservice.userdetails;
@@ -105,24 +110,31 @@ export class HomePage {
 
   loaduserdetails() {
     this.userservice.getuserdetails().then((res: any) => {
-      this.provider.name = res.name;
-      this.provider.email = res.email;
-      this.provider.photoURL = res.photoURL;
-      this.provider.intro = res.intro;
-      this.provider.affiliation = res.affiliation;
-      this.provider.skill = res.skill;
-      this.provider.school.name = res.school.name;
-      this.provider.school.department = res.school.department;
-      this.provider.school.graduation = res.school.graduation;
-      this.provider.company.name = res.company.name;
-      this.provider.company.position = res.company.position;
-      this.provider.company.category = res.company.category;
+      this.provider = res;
     })
+  }
+
+  loadrequestdetails() {
+    this.requestservice.getmyrequestsender();
+    this.events.subscribe('gotrequestsender', () => {
+      this.myrequestsender = [];
+      this.myrequestsender = this.requestservice.myrequestsender;
+    })
+  }
+
+  ionViewWillLeave(){
+    console.log(this.myfriends);
+    console.log(this.myrequests);
+    console.log(this.myrequestsender);
+    console.log(this.filteredusers);
   }
 
   ionViewDidLeave() {
     this.events.unsubscribe('gotrequests');
     this.events.unsubscribe('friends');
+  }
+
+  userdetail() {
   }
 
   ngAfterViewInit() {
@@ -153,41 +165,37 @@ export class HomePage {
 
   // Connected through HTML
   voteUp(like: boolean) {
+    this.loadrequestdetails();
     let removedCard = this.cards.pop();
     this.addNewCards(1);
     if (like) {
       // this.toastCtrl.create('You liked: ' + removedCard.email);
-      this.sendreq(this.cards);
+      this.write(removedCard);
       console.log('You liked: ' + removedCard.name+' '+removedCard.email);
     } else {
       // this.toastCtrl.create('You disliked: ' + removedCard.email);
+      this.left(removedCard);
       console.log('You disliked: ' + removedCard.name+' '+removedCard.email);
     }
   }
 
-  // Add new cards to our array
-//   addNewCards(count: number) {
-//   this.http.get('https://randomuser.me/api/?results=' + count)
-// .map(data => data.json().results).subscribe(result => {
-//   for (let val of result) {
-//     this.cards.push(val);
-//   }
-// })
-// }
-
-// データベースに保存されている自分以外のユーザーをrandom表示
-addNewCards(count: number) {
-  this.firedata.on('value', (snapshot) => {
-    var ids = [];
-    let userdata = snapshot.val();
-    for (var key in userdata) {
-      if (key != firebase.auth().currentUser.uid)
-      ids.push(userdata[key]);
-    }
-    var id = ids[Math.floor(Math.random()*ids.length)];
-    console.log(id);
-    this.cards.push(id);
-  })
+ // データベースに保存されている自分と友達以外のユーザーをrandom表示
+ addNewCards(count: number) {
+  this.firefriends.child(firebase.auth().currentUser.uid).on('value', (snapshot) => {
+   var friendsuid = [];
+   let allfriends = snapshot.val();
+   for (var i in allfriends) {
+     friendsuid.push(allfriends[i].uid);
+   }
+   var ids = [];
+   for (var key in this.filteredusers) {
+     if (friendsuid.indexOf(key) === -1) {
+       ids.push(this.filteredusers[key]);
+     }
+   }
+   var id = ids[Math.floor(Math.random() * ids.length)];
+   this.cards.push(id);
+ })
 }
 
   // http://stackoverflow.com/questions/57803/how-to-convert-decimal-to-hex-in-javascript
@@ -201,17 +209,22 @@ addNewCards(count: number) {
     return hex;
   }
 
-  // リクエストを送る
-    sendreq(recipient) {
+  // 右スワイプのロジック
+    write(recipient) {
+    console.log("スワイプしたユーザーは↓");
+    console.log(recipient);
      this.newrequest.sender = firebase.auth().currentUser.uid;
      this.newrequest.recipient = recipient.uid;
-     if (this.newrequest.sender === this.newrequest.recipient) //自分のとき
-       alert('永遠の友人とは、己のこと。');
-       else if (this.newrequest.recipient === this.myrequests.uid) {
-         console.log('許可する');
+       if (this.myrequestsender.indexOf(recipient.uid) !== -1) {
+         console.log(this.newrequest.recipient + 'を許可する');
+         this.requestservice.acceptrequest(recipient).then(() => {
+           this.navCtrl.setRoot(MatchPage, recipient);
+         })
+         this.chatservice.initializebuddy(recipient);
        } //リクエストもらっている
        // else if () {} //既に送信済み
        else {
+       console.log(this.newrequest.recipient + "へリクエスト送る");
        this.requestservice.sendrequest(this.newrequest).then((res: any) => {
          if (res.success) {
            let sentuser = this.filteredusers.indexOf(recipient);
@@ -222,6 +235,21 @@ addNewCards(count: number) {
          console.log(err);
        })
      }
+   }
+
+   left(recipient) {
+     console.log("左にやった");
+     console.log(this.myrequestsender.indexOf(recipient.uid));
+     if (this.myrequestsender.indexOf(recipient.uid) !== -1) {
+       this.requestservice.deleterequest(recipient).then(() => {
+         console.log(recipient.uid + 'のリクエストを拒否しました');
+       }).catch((err) => {
+         alert(err);
+       })
+     } //リクエストもらっている
+     else {
+     console.log("見送り");
+   }
    }
 
   prof(){

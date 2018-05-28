@@ -1,41 +1,33 @@
-<ion-header>
-  <ion-navbar>
-    <ion-title>Login Page</ion-title>
-  </ion-navbar>
-</ion-header>
-<ion-content padding>
+<ion-content>
   <!-- <h4 text-center padding>Discover new people around you</h4> -->
-  <p text-center >
+  <!-- <p text-center >
     <img src="images/prezy-black.png" style="height:100px; width:100px;">
-  </p>
-  <ion-slides style="height:60%;">
+  </p> -->
+  <ion-slides pager effect="slide" paginationType="progress">
+    <!-- <ion-slides style="height:60%;"> -->
     <ion-slide>
-      <h2 text-center >Welcome to Prezy App</h2>
+      <h1 text-center >ようこそ、Prezyへ</h1>
     </ion-slide>
     <ion-slide>
-      <h2 text-center >社長と会える</h2>
+      <ion-icon ios="ios-chatbubbles" md="md-chatbubbles"></ion-icon>
+      <h3 text-center>社長から直接話を聞ける</h3>
+      <ion-icon ios="ios-images" md="md-images"></ion-icon>
+      <h3 text-center>シンプルなUI・UX</h3>
+      <ion-icon ios="ios-happy" md="md-happy"></ion-icon>
+      <h3 text-center>スキマに使える</h3>
     </ion-slide>
     <ion-slide>
-      <h2 text-center >直接話しが聞ける</h2>
-    </ion-slide>
-  </ion-slides>
-
-  <p text-center padding>
-    <button ion-button full class="butn" (click)="FBlogin()">
-      <ion-icon name="logo-facebook"></ion-icon>
-      学生はこちら
-    </button>
-    <button ion-button full outline color="primary" style="margin-top:5%;border-radius:20px" (click)="Prelogin()">
-      <ion-icon name="logo-facebook"></ion-icon>
-      社長はこちら
-    </button>
-      </p>
+      <h2 text-center >今すぐ始める</h2>
+    <p text-center padding>
+      <button ion-button full class="butn" (click)="FBlogin()">
+        <ion-icon name="logo-facebook"></ion-icon>
+        学生はこちら
+      </button>
+      <button ion-button full outline color="primary" style="margin-top:5%;border-radius:20px" (click)="Prelogin()">
+        <ion-icon name="logo-facebook"></ion-icon>
+        社長はこちら
+      </button>
+    </p>
+      </ion-slide>
+      </ion-slides>
 </ion-content>
-<!-- <ion-footer>
-    <ion-toolbar>
-        <p text-center>
-        We don't post anything to Facebook
-      </p>
-      <p text-center>By Signing in, you agree with out Terms and Condition and Privacy Policy</p>
-    </ion-toolbar>
-  </ion-footer> -->

@@ -28,7 +28,26 @@ export class ChatmainPage {
   myrequests;
   myfriends;
 
-  provider:any;
+  // provider:any;
+  provider = {
+    loggedin: false,
+    name: '',
+    email: '',
+    photoURL: '',
+    intro: '',
+    affiliation: '',
+    skill: '',
+    school:{
+      name: '',
+      department: '',
+      graduation: ''
+    },
+    company: {
+      name: '',
+      position: '',
+      category: ''
+    }
+  }
 
   constructor(
     public navCtrl: NavController,
@@ -50,10 +69,9 @@ export class ChatmainPage {
   ionViewDidLoad() {
     console.log('ionViewDidLoad ChatmainPage');
     console.log(this.filteredusers);
+    // this.loaduserdetails();
     console.log(this.provider);
-    console.log(this.myfriends);
-    console.log(this.myrequests);
-  }
+}
 
 // リクエスト情報を読み込む
   ionViewWillEnter() {
@@ -68,6 +86,17 @@ export class ChatmainPage {
     this.myfriends = [];
     this.myfriends = this.requestservice.myfriends;
   })
+  }
+
+  // loaduserdetails() {
+  //   this.userservice.getuserdetails().then((res: any) => {
+  //     this.provider = res;
+  //   })
+  // }
+
+  ionViewWillLeave(){
+    console.log(this.myfriends);
+    console.log(this.myrequests);
   }
 
   ionViewDidLeave() {

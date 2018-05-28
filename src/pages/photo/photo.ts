@@ -23,7 +23,26 @@ import { ProfilePage } from '../profile/profile';
 export class PhotoPage {
   moveon = true;
 
-  provider:any;
+  // provider:any;
+  provider = {
+    loggedin: false,
+    name: '',
+    email: '',
+    photoURL: '',
+    intro: '',
+    affiliation: '',
+    skill: '',
+    school:{
+      name: '',
+      department: '',
+      graduation: ''
+    },
+    company: {
+      name: '',
+      position: '',
+      category: ''
+    }
+  }
 
   testCheckboxOpen: boolean;
 

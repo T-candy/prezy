@@ -18,6 +18,7 @@ export class RequestsProvider {
   firefriends = firebase.database().ref('/friends');
   userdetails;
   myfriends;
+  myrequestsender;
   newrequest = {} as connreq;
 
   constructor(
@@ -42,6 +43,19 @@ export class RequestsProvider {
     })
     return promise;
   }
+
+// 現在ユーザーのリクエスト情報senderをとる
+ getmyrequestsender(){
+ let allmyrequestsender;
+ this.firereq.child(firebase.auth().currentUser.uid).on('value', (snapshot) => {
+   allmyrequestsender = snapshot.val();
+   this.myrequestsender = [];
+   for (var i in allmyrequestsender) {
+     this.myrequestsender.push(allmyrequestsender[i].sender);
+   }
+   this.events.publish('gotrequestsender');
+ })
+}
 
 // リクエスト情報を取得
   getmyrequests() {
@@ -73,9 +87,9 @@ getmyfriends() {
     this.firefriends.child(firebase.auth().currentUser.uid).on('value', (snapshot) => {
       let allfriends = snapshot.val();
       this.myfriends = [];
-      for (var i in allfriends)
+      for (var i in allfriends) {
         friendsuid.push(allfriends[i].uid);
-
+      }
       this.userservice.getallusers().then((users) => {
         this.myfriends = [];
         for (var j in friendsuid)

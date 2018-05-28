@@ -22,7 +22,26 @@ export class BuddychatPage {
   newmessage;
   allmessages = [];
 
-  provider: any;
+  // provider: any;
+  provider = {
+    loggedin: false,
+    name: '',
+    email: '',
+    photoURL: '',
+    intro: '',
+    affiliation: '',
+    skill: '',
+    school:{
+      name: '',
+      department: '',
+      graduation: ''
+    },
+    company: {
+      name: '',
+      position: '',
+      category: ''
+    }
+  }
 
   constructor(
     public navCtrl: NavController,
