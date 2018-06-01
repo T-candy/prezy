@@ -24,20 +24,16 @@ export class AuthProvider {
 
 */
 
-//  メールログイン＆データベースに保存
-  login(credentials: usercreds) {
+//  メール登録＆ログイン＆データベースに保存
+  register(credentials: usercreds) {
     var promise = new Promise((resolve, reject) => {
-      this.afireauth.auth.signInWithEmailAndPassword(credentials.email, credentials.password).then(() => {
-        this.afireauth.auth.currentUser.updateProfile({
-          displayName : credentials.name,
-          photoURL : ''
-        }).then(() => {
+      this.afireauth.auth.createUserWithEmailAndPassword(credentials.email, credentials.password).then(() => {
           this.firedata.child(this.afireauth.auth.currentUser.uid).set({
               uid: this.afireauth.auth.currentUser.uid,
               name: credentials.name,
               email: this.afireauth.auth.currentUser.email,
               photoURL: 'images/kao.jpg',
-              intro : '私は神です。',
+              intro : '私は神です。変更してないよ',
               affiliation : '',
               skill : '',
               school:{
@@ -53,8 +49,22 @@ export class AuthProvider {
             }).then(() => {
               resolve(true);
             })
-        }).catch((err) => {
-          reject(err);
+      }).catch((err) => {
+        reject(err);
+       })
+    })
+    return promise;
+  }
+
+//  メールログイン
+  login(credentials: usercreds) {
+    var promise = new Promise((resolve, reject) => {
+      this.afireauth.auth.signInWithEmailAndPassword(credentials.email, credentials.password).then(() => {
+        this.afireauth.auth.currentUser.updateProfile({
+          displayName : credentials.name,
+          photoURL : ''
+        }).then(() => {
+          resolve(true);
         })
       }).catch((err) => {
         reject(err);

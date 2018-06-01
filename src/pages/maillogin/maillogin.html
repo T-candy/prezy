@@ -1,0 +1,69 @@
+<!--
+  Generated template for the MailloginPage page.
+
+  See http://ionicframework.com/docs/components/#navigation for more info on
+  Ionic pages and navigation.
+-->
+<!-- <ion-header>
+
+  <ion-navbar>
+    <button ion-button full (click)="back" style="width:30px;height:30px;border-radius:50%">
+      <ion-icon ios="ios-arrow-dropleft" md="md-arrow-dropleft"></ion-icon>
+    </button>
+  </ion-navbar>
+
+</ion-header> -->
+
+<ion-content>
+    <div >
+        <ion-segment [(ngModel)]="open" style="background: linear-gradient(to right, #3A1C71 , #D76D77, #FFAF7B)">
+          <ion-segment-button value="register" style="color:white">
+            新規登録
+          </ion-segment-button>
+          <ion-segment-button value="login" style="color:white">
+              ログイン
+          </ion-segment-button>
+        </ion-segment>
+      </div>
+
+      <div [ngSwitch]="open">
+        <ion-list *ngSwitchDefault>
+          <ion-list-header>新規登録</ion-list-header>
+          <ion-item>
+            <ion-label color="primary" stacked>名前</ion-label>
+            <ion-input type="text" placeholder="name Input" [(ngModel)]="credentials.name"></ion-input>
+          </ion-item>
+
+          <ion-item>
+            <ion-label color="primary" stacked>Email</ion-label>
+            <ion-input type="email" placeholder="Email Input" [(ngModel)]="credentials.email"></ion-input>
+          </ion-item>
+
+          <ion-item>
+            <ion-label color="primary" stacked>Password</ion-label>
+            <ion-input type="password" placeholder="Password Input" [(ngModel)]="credentials.password"></ion-input>
+          </ion-item>
+
+          <button ion-button (click)="register()">登録する</button>
+        </ion-list>
+
+        <ion-list *ngSwitchCase="'login'">
+          <ion-list-header>ログイン</ion-list-header>
+          <ion-item>
+            <ion-label color="primary" stacked>Email</ion-label>
+            <ion-input type="email" placeholder="Email Input" [(ngModel)]="credentials.email"></ion-input>
+          </ion-item>
+
+          <ion-item>
+            <ion-label color="primary" stacked>Password</ion-label>
+            <ion-input type="password" placeholder="Password Input" [(ngModel)]="credentials.password"></ion-input>
+          </ion-item>
+
+          <button ion-button (click)="login()">ログインする</button>
+        </ion-list>
+      </div>
+
+      <button ion-button full (click)="back()" style="width:30px;height:30px;bottom:10px;left:10px;right: 0;position: fixed;border-radius:50%;">
+        <ion-icon ios="ios-arrow-dropleft" md="md-arrow-dropleft"></ion-icon>
+      </button>
+</ion-content>

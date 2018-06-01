@@ -23,9 +23,10 @@ import { ProfilePage } from '../profile/profile';
 export class PhotoPage {
   moveon = true;
 
+  loggedin = false;
+
   // provider:any;
   provider = {
-    loggedin: false,
     name: '',
     email: '',
     photoURL: '',
@@ -66,6 +67,29 @@ export class PhotoPage {
   ionViewDidLoad() {
     console.log('ionViewDidLoad PhotoPage');
     console.log(this.provider);
+  }
+
+  ionViewWillLeave() {
+    let alert = this.alertCtrl.create({
+    title: '変更を破棄しますか？',
+    message: '変更内容が保存されていません。',
+    buttons: [
+      {
+        text: 'はい',
+        role: 'cancel',
+        handler: () => {
+          console.log('変更破棄');
+        }
+      },
+      {
+        text: 'いいえ',
+        handler: () => {
+          console.log('変更したい戻る');
+        }
+      }
+    ]
+  });
+  alert.present();
   }
 
   chooseimage() {
@@ -303,7 +327,8 @@ doCompany() {
     this.userservice.updatedetail(this.provider).then((res: any) => {
       loader.dismiss();
       if (res.success) {
-        this.navCtrl.setRoot(ProfilePage, this.provider);
+        // this.navCtrl.setRoot(ProfilePage, this.provider);
+        this.navCtrl.pop();
       }
       else {
         alert(res);

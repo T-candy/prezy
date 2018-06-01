@@ -1,5 +1,5 @@
 import { Component, Injectable, ViewChild } from '@angular/core';
-import { IonicPage, NavController, NavParams, AlertController, Slides } from 'ionic-angular';
+import { IonicPage, NavController, NavParams, AlertController, ModalController, Slides } from 'ionic-angular';
 import { AngularFireAuth } from 'angularfire2/auth';
 import * as firebase from 'firebase/app';
 
@@ -11,6 +11,7 @@ import { AuthProvider } from '../../providers/auth/auth';
 
 import { HomePage } from '../home/home';
 import { ProfilePage } from '../profile/profile';
+import { MailloginPage } from '../maillogin/maillogin';
 
 /**
  * Generated class for the LoginPage page.
@@ -28,8 +29,9 @@ export class LoginPage {
 
   firedata = firebase.database().ref('/users');
 
+  loggedin = false;
+
   provider = {
-    loggedin: false,
     name: '',
     email: '',
     photoURL: '',
@@ -54,6 +56,7 @@ export class LoginPage {
     public navParams: NavParams,
     public authservice: AuthProvider,
     public alertCtrl: AlertController,
+    public modalCtrl: ModalController,
     private afAuth: AngularFireAuth,
     private fb: Facebook,
     private platform: Platform
@@ -101,7 +104,7 @@ export class LoginPage {
   FBlogin(){
     var promise = new Promise((resolve, reject) => {
       this.afAuth.auth.signInWithPopup(new firebase.auth.FacebookAuthProvider()).then(res => {
-      this.provider.loggedin = true;
+      this.loggedin = true;
         // this.provider.name = res.user.displayName;
         // this.provider.email = res.user.email;
         if (res.user.photoURL == null ) {
@@ -149,53 +152,59 @@ export class LoginPage {
     return promise;
     }
 
+    maillogin(){
+      // this.navCtrl.push(MailloginPage);
+      let loginModal = this.modalCtrl.create(MailloginPage);
+      loginModal.present();
+    }
+
 // メールログインボタン　既にFirebaseに登録しているユーザーのみ
-    Prelogin(){
-      let alert = this.alertCtrl.create({
-    title: 'Login',
-    inputs: [
-      {
-        name: 'name',
-        placeholder: 'name'
-      },
-      {
-        name: 'email',
-        placeholder: 'email'
-      },
-      {
-        name: 'password',
-        placeholder: 'Password',
-        type: 'password'
-      }
-    ],
-    buttons: [
-      {
-        text: 'Cancel',
-        role: 'cancel',
-        handler: data => {
-          console.log('Cancel clicked');
-        }
-      },
-      {
-        text: 'Login',
-        handler: data => {
-          this.credentials.name = data.name;
-          this.credentials.email = data.email;
-          this.credentials.password = data.password;
-            this.authservice.login(this.credentials).then((res: any) => {
-                  if (!res.code) {
-                    console.log(res);
-                    this.provider.loggedin = true;
-                    this.navCtrl.setRoot(HomePage, this.provider);
-                  } else {
-                    console.log(res);
-                }
-              })
-            }
-      }
-    ]
-  });
-  alert.present();
-}
+//     Prelogin(){
+//       let alert = this.alertCtrl.create({
+//     title: 'Login',
+//     inputs: [
+//       {
+//         name: 'name',
+//         placeholder: 'name'
+//       },
+//       {
+//         name: 'email',
+//         placeholder: 'email'
+//       },
+//       {
+//         name: 'password',
+//         placeholder: 'Password',
+//         type: 'password'
+//       }
+//     ],
+//     buttons: [
+//       {
+//         text: 'Cancel',
+//         role: 'cancel',
+//         handler: data => {
+//           console.log('Cancel clicked');
+//         }
+//       },
+//       {
+//         text: 'Login',
+//         handler: data => {
+//           this.credentials.name = data.name;
+//           this.credentials.email = data.email;
+//           this.credentials.password = data.password;
+//             this.authservice.login(this.credentials).then((res: any) => {
+//                   if (!res.code) {
+//                     console.log(res);
+//                     this.loggedin = true;
+//                     this.navCtrl.setRoot(HomePage, {loggedin: this.loggedin});
+//                   } else {
+//                     console.log(res);
+//                 }
+//               })
+//             }
+//       }
+//     ]
+//   });
+//   alert.present();
+// }
 
 }

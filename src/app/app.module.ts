@@ -30,6 +30,7 @@ import { ChatmainPage } from '../pages/chatmain/chatmain';
 import { ChatindPage } from '../pages/chatind/chatind';
 import { PhotoPage } from '../pages/photo/photo';
 import { LoginPage } from '../pages/login/login';
+import { MailloginPage } from '../pages/maillogin/maillogin';
 import { UserProvider } from '../providers/user/user';
 import { ImghandlerProvider } from '../providers/imghandler/imghandler';
 import { RequestsProvider } from '../providers/requests/requests';
@@ -44,7 +45,8 @@ import { ChatProvider } from '../providers/chat/chat';
     ChatmainPage,
     ChatindPage,
     PhotoPage,
-    LoginPage
+    LoginPage,
+    MailloginPage
   ],
   imports: [
     BrowserModule,
@@ -65,7 +67,8 @@ import { ChatProvider } from '../providers/chat/chat';
     ChatmainPage,
     ChatindPage,
     PhotoPage,
-    LoginPage
+    LoginPage,
+    MailloginPage
   ],
   providers: [
     StatusBar,

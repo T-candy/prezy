@@ -1,5 +1,5 @@
 import { Component,ViewChild, ViewChildren, QueryList } from '@angular/core';
-import { NavController, NavParams, Events } from 'ionic-angular';
+import { ModalController, NavController, ToastController, NavParams, Events } from 'ionic-angular';
 import { ProfilePage } from '../profile/profile';
 import { ChatmainPage } from '../chatmain/chatmain';
 import { ChatindPage } from '../chatind/chatind';
@@ -41,8 +41,9 @@ export class HomePage {
   myfriends;
   myrequestsender;
 
+  loggedin = false;
+
   provider = {
-    loggedin: false,
     name: '',
     email: '',
     photoURL: '',
@@ -62,6 +63,9 @@ export class HomePage {
   }
 
   constructor(
+    private toastCtrl: ToastController,
+    private afAuth: AngularFireAuth,
+    public modalCtrl: ModalController,
     public navCtrl: NavController,
     public navParams: NavParams,
     public userservice: UserProvider,
@@ -87,39 +91,23 @@ export class HomePage {
  }
 
  ionViewDidLoad() {
-   // this.loaduserdetails();
+   this.toastmessage();
    console.log('ionViewDidLoad HomePage');
+   this.loadCards();
+   console.log(this.cards);
  }
 
   ionViewWillEnter() {
     this.loaduserdetails();
     this.loadrequestdetails();
 
-    this.requestservice.getmyrequests();
     this.requestservice.getmyfriends();
-    // this.requestservice.getmyrequestsender();
-    this.events.subscribe('gotrequests', () => {
-      this.myrequests = [];
-      this.myrequests = this.requestservice.userdetails;
-    })
     this.events.subscribe('friends', () => {
       this.myfriends = [];
       this.myfriends = this.requestservice.myfriends;
     })
-  }
-
-  loaduserdetails() {
-    this.userservice.getuserdetails().then((res: any) => {
-      this.provider = res;
-    })
-  }
-
-  loadrequestdetails() {
-    this.requestservice.getmyrequestsender();
-    this.events.subscribe('gotrequestsender', () => {
-      this.myrequestsender = [];
-      this.myrequestsender = this.requestservice.myrequestsender;
-    })
+    this.loggedin = this.navParams.get("loggedin");
+    console.log(this.loggedin);
   }
 
   ionViewWillLeave(){
@@ -134,10 +122,52 @@ export class HomePage {
     this.events.unsubscribe('friends');
   }
 
-  userdetail() {
+  loaduserdetails() {
+    this.userservice.getuserdetails().then((res: any) => {
+      this.provider = res;
+    })
   }
 
-  ngAfterViewInit() {
+  loadrequestdetails() {
+    this.requestservice.getmyrequestsender();
+    this.events.subscribe('gotrequestsender', () => {
+      this.myrequestsender = [];
+      this.myrequestsender = this.requestservice.myrequestsender;
+    })
+    this.requestservice.getmyrequests();
+    this.events.subscribe('gotrequests', () => {
+      this.myrequests = [];
+      this.myrequests = this.requestservice.userdetails;
+    })
+  }
+
+  userdetail() {
+    this.loggedin = false;
+    this.navCtrl.push(ProfilePage, {
+      recipient: this.cards[0],
+      loggedin: this.loggedin
+    });
+  }
+
+  toastmessage() {
+    this.afAuth.authState.subscribe(data => {
+      if(data.email && data.uid) {
+        this.toastCtrl.create({
+          message: 'ログインしました！',
+          duration: 3000
+        }).present();
+      }
+      else {
+        this.toastCtrl.create({
+          message: '失敗しました',
+          duration: 3000
+        }).present();
+      }
+    })
+  }
+
+  loadCards() {
+    // ngAfterViewInit() {
     // Either subscribe in controller or set in HTML
     this.swingStack.throwin.subscribe((event: DragEvent) => {
       event.target.style.background = '#ffffff';
@@ -254,11 +284,11 @@ export class HomePage {
 
   prof(){
     // this.provider.loggedin = true;
-    this.navCtrl.push(ProfilePage,  this.provider);
+    this.navCtrl.push(ProfilePage, {loggedin: this.loggedin});
   }
   chatm(){
     // this.provider.loggedin = true;
-    this.navCtrl.push(ChatmainPage, this.provider)
+    this.navCtrl.push(ChatmainPage, {loggedin: this.loggedin})
   }
   chatid(){
     this.navCtrl.push(ChatindPage)
