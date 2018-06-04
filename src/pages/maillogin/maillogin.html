@@ -15,8 +15,8 @@
 </ion-header> -->
 
 <ion-content>
-    <div >
-        <ion-segment [(ngModel)]="open" style="background: linear-gradient(to right, #3A1C71 , #D76D77, #FFAF7B)">
+    <div>
+        <ion-segment [(ngModel)]="open" style="background: linear-gradient(to right, #FF8000 , #FE9A2E, #F7BE81)">
           <ion-segment-button value="register" style="color:white">
             新規登録
           </ion-segment-button>
@@ -26,44 +26,105 @@
         </ion-segment>
       </div>
 
-      <div [ngSwitch]="open">
-        <ion-list *ngSwitchDefault>
+      <div [ngSwitch]="open" [hidden]="employer">
+        <ion-list *ngSwitchDefault padding>
           <ion-list-header>新規登録</ion-list-header>
           <ion-item>
-            <ion-label color="primary" stacked>名前</ion-label>
+            <ion-label color="main" stacked>名前</ion-label>
             <ion-input type="text" placeholder="name Input" [(ngModel)]="credentials.name"></ion-input>
           </ion-item>
 
           <ion-item>
-            <ion-label color="primary" stacked>Email</ion-label>
+            <ion-label color="main" stacked>メールアドレス</ion-label>
             <ion-input type="email" placeholder="Email Input" [(ngModel)]="credentials.email"></ion-input>
           </ion-item>
 
           <ion-item>
-            <ion-label color="primary" stacked>Password</ion-label>
+            <ion-label color="main" stacked>パスワード</ion-label>
             <ion-input type="password" placeholder="Password Input" [(ngModel)]="credentials.password"></ion-input>
           </ion-item>
 
-          <button ion-button (click)="register()">登録する</button>
+          <div text-center>
+            <button ion-button round margin-top color="main" (click)="register()">登録する</button>
+        </div>
         </ion-list>
 
-        <ion-list *ngSwitchCase="'login'">
+        <ion-list *ngSwitchCase="'login'" padding>
           <ion-list-header>ログイン</ion-list-header>
           <ion-item>
-            <ion-label color="primary" stacked>Email</ion-label>
+            <ion-label color="main" stacked>メールアドレス</ion-label>
             <ion-input type="email" placeholder="Email Input" [(ngModel)]="credentials.email"></ion-input>
           </ion-item>
 
           <ion-item>
-            <ion-label color="primary" stacked>Password</ion-label>
+            <ion-label color="main" stacked>パスワード</ion-label>
             <ion-input type="password" placeholder="Password Input" [(ngModel)]="credentials.password"></ion-input>
           </ion-item>
+          <p>パスワードを忘れた方はこちら</p>
 
-          <button ion-button (click)="login()">ログインする</button>
+          <div text-center>
+          <button ion-button round margin-top color="light" (click)="login()">ログインする</button>
+          <button ion-button small round margin-top style="background-color:#3B5998;" (click)="FBlogin()">Facebookでログインも可能です</button>
+        </div>
         </ion-list>
       </div>
 
-      <button ion-button full (click)="back()" style="width:30px;height:30px;bottom:10px;left:10px;right: 0;position: fixed;border-radius:50%;">
+      <div [ngSwitch]="open" [hidden]="!employer">
+        <ion-list *ngSwitchDefault padding>
+          <ion-list-header>企業新規登録</ion-list-header>
+
+          <ion-item>
+            <ion-label color="main" stacked>会社名</ion-label>
+            <ion-input type="text" placeholder="株式会社太郎" [(ngModel)]="companydata.companyname"></ion-input>
+          </ion-item>
+
+          <ion-item>
+            <ion-label color="main" stacked>都道府県</ion-label>
+            <ion-input type="text" placeholder="宮城県" [(ngModel)]="companydata.place"></ion-input>
+          </ion-item>
+
+          <ion-item>
+            <ion-label color="main" stacked>会社ホームページ</ion-label>
+            <ion-input type="text" placeholder="http://google.com" [(ngModel)]="companydata.homepage"></ion-input>
+          </ion-item>
+
+          <ion-item>
+            <ion-label color="main" stacked>社長のお名前</ion-label>
+            <ion-input type="text" placeholder="太郎" [(ngModel)]="companydata.name"></ion-input>
+          </ion-item>
+
+          <ion-item>
+            <ion-label color="main" stacked>メールアドレス</ion-label>
+            <ion-input type="email" placeholder="Email Input" [(ngModel)]="companydata.email"></ion-input>
+          </ion-item>
+
+          <ion-item>
+            <ion-label color="main" stacked>パスワード</ion-label>
+            <ion-input type="password" placeholder="Password Input" [(ngModel)]="companydata.password"></ion-input>
+          </ion-item>
+
+          <div text-center>
+            <button ion-button round margin-top color="main" (click)="register2()">同意して登録</button>
+        </div>
+        </ion-list>
+
+        <ion-list *ngSwitchCase="'login'" padding>
+          <ion-list-header>ログイン</ion-list-header>
+          <ion-item>
+            <ion-label color="main" stacked>Email</ion-label>
+            <ion-input type="email" placeholder="Email Input" [(ngModel)]="companydata.email"></ion-input>
+          </ion-item>
+
+          <ion-item>
+            <ion-label color="main" stacked>Password</ion-label>
+            <ion-input type="password" placeholder="Password Input" [(ngModel)]="companydata.password"></ion-input>
+          </ion-item>
+          <p>パスワードを忘れた方はこちら</p>
+
+        </ion-list>
+      </div>
+
+      <button ion-button color="main" (click)="back()" style="width:30px;height:30px;bottom:10px;left:10px;right: 0;position: fixed;border-radius:50%;">
         <ion-icon ios="ios-arrow-dropleft" md="md-arrow-dropleft"></ion-icon>
       </button>
 </ion-content>

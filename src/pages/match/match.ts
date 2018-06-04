@@ -20,8 +20,8 @@ import { ChatProvider } from '../../providers/chat/chat';
 export class MatchPage {
   allmessages = [];
   buddy: any;
+  loggedin = false;
   provider = {
-    loggedin: false,
     name: '',
     email: '',
     photoURL: '',
@@ -76,9 +76,8 @@ export class MatchPage {
     //   this.events.unsubscribe('friends');
     // }
 
-
   home(){
-    this.navCtrl.setRoot(HomePage, this.provider)
+    this.navCtrl.popToRoot();
   }
 
   buddychat(buddy) {

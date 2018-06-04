@@ -58,18 +58,24 @@ export class PhotoPage {
     public loadingCtrl: LoadingController,
     public alertCtrl: AlertController,
     public actionSheetCtrl: ActionSheetController
-  ) {
-    this.userservice.getuserdetails().then((res: any) => {
-      this.provider = res;
-    })
-  }
+  ) {}
 
   ionViewDidLoad() {
     console.log('ionViewDidLoad PhotoPage');
+  }
+
+  ionViewWillEnter() {
+    this.userservice.getuserdetails().then((res: any) => {
+      this.provider = res;
+    })
     console.log(this.provider);
   }
 
   ionViewWillLeave() {
+    // this.alertset();
+  }
+
+  alertset() {
     let alert = this.alertCtrl.create({
     title: '変更を破棄しますか？',
     message: '変更内容が保存されていません。',
@@ -154,17 +160,6 @@ export class PhotoPage {
   //       this.imgurl = uploadedurl;
   //       this.moveon = false;
   //     })
-  //   })
-  // }
-
-// ボタン押してFirebaseに保存
-  // updateproceed() {
-  //   let loader = this.loadingCtrl.create({
-  //     content: 'Please wait'
-  //   })
-  //   loader.present();
-  //   this.userservice.updateimage(this.imgurl).then((res: any) => {
-  //     loader.dismiss();
   //   })
   // }
 

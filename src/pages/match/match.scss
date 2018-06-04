@@ -1,3 +1,31 @@
 page-match {
 
+  .match {
+    font-size:60px;
+    font-family: 'Sacramento', cursive;
+    margin-top:50px;
+  }
+
+  h6 {
+    color:white;
+  }
+
+  .profileimg {
+    border-radius:50%;
+    width:100px;
+    height:100px;
+  }
+
+  .message {
+    margin-top:20px;
+    border-radius:40px;
+    background: linear-gradient(to right, #3A1C71 , #D76D77, #FFAF7B);
+  }
+
+  .swipe {
+    margin-top:20px;
+    border-radius:40px;
+    background: linear-gradient(to right, rgb(65, 64, 64) , grey, rgb(65, 64, 64));
+  }
+
 }

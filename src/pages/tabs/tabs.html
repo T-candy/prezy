@@ -1,5 +1,5 @@
-<ion-tabs>
-  <ion-tab [root]="tab1Root" tabTitle="Home" tabIcon="home"></ion-tab>
-  <ion-tab [root]="tab2Root" tabTitle="About" tabIcon="information-circle"></ion-tab>
-  <ion-tab [root]="tab3Root" tabTitle="Contact" tabIcon="contacts"></ion-tab>
+<ion-tabs selectedIndex="1">
+  <ion-tab [root]="tab1Root" [rootParams]="loggedin" tabTitle="Profile" tabIcon="person"></ion-tab>
+  <ion-tab [root]="tab2Root" [rootParams]="loggedin" tabTitle="Home" tabIcon="images"></ion-tab>
+  <ion-tab [root]="tab3Root" [rootParams]="loggedin" tabTitle="Chat" tabIcon="chatbubbles"></ion-tab>
 </ion-tabs>

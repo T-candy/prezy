@@ -1,72 +1,26 @@
-<ion-header>
-  <ion-navbar style="min-height:80px">
-   <ion-grid>
-     <ion-row>
-        <ion-col>
-            <img src="{{provider.photoURL}}" (click)="prof()" style="width:60px;height:60px;border-radius:50%">
-        </ion-col>
-        <ion-col style="margin-top:10px">
-            <div class="can-toggle" >
-              <div class="can-toggle demo-rebrand-2" >
-                    <input id="e" type="checkbox" >
-                    <label for="e">
-                      <div class="can-toggle__switch" data-checked="On" data-unchecked="No" style="max-width:150px; max-height:50px"></div>
-                    </label>
-                  </div>
-                  </div>
-                </ion-col>
-        <ion-col text-right style="margin-top:-5px">
-          <button ion-button icon-only large clear color="dark" (click)="chatm()">
-            <ion-icon name="ios-text"></ion-icon>
-          </button>
-        </ion-col>
-     </ion-row>
-   </ion-grid>
+<ion-header no-border>
+  <ion-navbar text-center>
+    <img src="assets/imgs/logo_ver1.png" style="height:30px;">
    </ion-navbar>
 </ion-header>
 
 <ion-content padding>
-  <!-- <div swing-stack #myswing1 [stackConfig]="stackConfig" (throwoutleft)="voteUp(false)" (throwoutright)="voteUp(true)" id="card-stack">
-    <ion-card #mycards1 swing-card *ngFor="let card of cards" class="td-card">
-  <p text-center *ngIf="card.picture">
-    <img *ngIf="card.picture" [src]="card.picture.large" style="min-height:100%;max-width:90%;border-radius:0%;margin:0 auto;height:200px;width:200px;box-shadow: 2px 3px 5px grey;">
-  </p>
-  <ion-card-content>
-  <ion-card-title text-center>{{ card.name.first }} {{ card.name.last }}</ion-card-title>
-  <p>株式会社Prezyの代表をしてます。前職では、Googleで人工知能の研究をしていました。</p>
-</ion-card-content>
-</ion-card>
-</div> -->
 
-<div swing-stack #myswing1 [stackConfig]="stackConfig" (throwoutleft)="voteUp(false)" (throwoutright)="voteUp(true)" (click)="userdetail()" id="card-stack">
-  <ion-card #mycards1 swing-card *ngFor="let key of cards" class="td-card">
-<p text-center *ngIf="key.photoURL">
-  <img *ngIf="key.photoURL" [src]="key.photoURL" style="min-height:100%;max-width:90%;border-radius:0%;margin:0 auto;height:200px;width:200px;box-shadow: 2px 3px 5px grey;">
-</p>
-<ion-card-content>
-<ion-card-title text-center>{{ key.name }}</ion-card-title>
-<p>{{key.intro}}</p>
-</ion-card-content>
-</ion-card>
-</div>
-
-  <div text-center style="bottom:10px;left:0;right: 0;position: fixed;width:100%;align-content:center;">
-    <ion-buttons text-center style="display:inline-block;">
-        <!-- <button ion-button icon-only  outline color="cusyellow"style="width:50px;height:50px;border-radius:50%">
-            <ion-icon name="md-refresh"></ion-icon>
-          </button> -->
-          <button ion-button icon-only outline color="danger" (click)="voteUp(false)" style="width:70px;height:70px;border-radius:50%">
-              <ion-icon name="md-thumbs-down"></ion-icon>
-            </button>
-          <button ion-button icon-only outline color="cuspurple" style="width:50px;height:50px;border-radius:50%" (click)="chatid()">
-                <ion-icon name="md-flash"></ion-icon>
-          </button>
-          <button ion-button icon-only outline color="secondary" (click)="voteUp(true)" style="width:70px;height:70px;border-radius:50%">
-                <ion-icon name="md-thumbs-up"></ion-icon>
-          </button>
-          <!-- <button ion-button icon-only outline color="primary" style="width:50px;height:50px;border-radius:50%">
-               <ion-icon name="md-star"></ion-icon>
-            </button> -->
-    </ion-buttons>
+  <div text-center margin>
+    <h3 [hidden]="employer">今日の社長</h3>
+    <h3 [hidden]="!employer">今日の学生</h3>
   </div>
+
+  <div swing-stack #myswing1 [stackConfig]="stackConfig" (throwoutleft)="voteUp(false)" (throwoutright)="voteUp(true)" (click)="userdetail()" id="card-stack">
+    <ion-card #mycards1 swing-card *ngFor="let key of cards" class="td-card">
+      <p text-center *ngIf="key.photoURL">
+        <img *ngIf="key.photoURL" [src]="key.photoURL" class="card-img">
+      </p>
+      <ion-card-content>
+        <ion-card-title text-center>{{ key.name }}</ion-card-title>
+        <p>{{key.intro}}</p>
+      </ion-card-content>
+    </ion-card>
+  </div>
+
 </ion-content>

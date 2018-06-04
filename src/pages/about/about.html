@@ -1,11 +1,26 @@
 <ion-header>
   <ion-navbar>
     <ion-title>
-      About
+      設定
     </ion-title>
   </ion-navbar>
 </ion-header>
 
 <ion-content padding>
-
+<ion-list>
+  <ion-list-header>
+    各種通知設定
+  </ion-list-header>
+  <ion-item>メール設定</ion-item>
+  <ion-item>通知設定</ion-item>
+</ion-list>
+<ion-list>
+  <ion-list-header>
+    一般
+  </ion-list-header>
+  <ion-item (click)="aboutapp()">このアプリについて</ion-item>
+  <ion-item (click)="contact()">お問い合わせ</ion-item>
+  <ion-item (click)="logout()">ログアウト</ion-item>
+  <ion-item (click)="delete()">アカウントの削除</ion-item>
+</ion-list>
 </ion-content>

@@ -1,5 +1,5 @@
 import { Component,ViewChild, ViewChildren, QueryList } from '@angular/core';
-import { ModalController, NavController, ToastController, NavParams, Events } from 'ionic-angular';
+import { ModalController, NavController, ToastController, NavParams, Events, App } from 'ionic-angular';
 import { ProfilePage } from '../profile/profile';
 import { ChatmainPage } from '../chatmain/chatmain';
 import { ChatindPage } from '../chatind/chatind';
@@ -41,6 +41,7 @@ export class HomePage {
   myfriends;
   myrequestsender;
 
+  employer = false;
   loggedin = false;
 
   provider = {
@@ -72,6 +73,7 @@ export class HomePage {
     public requestservice: RequestsProvider,
     public chatservice: ChatProvider,
     public events: Events,
+    public appCtrl: App,
     private http: Http) {
     this.stackConfig = {
       // スワイプの方向とかもろもろ
@@ -85,6 +87,8 @@ export class HomePage {
         return 300;
       }
     };
+    // this.loggedin = navParams.data;
+
     this.userservice.getallusers().then((res: any) => {
       this.filteredusers = res;
     })
@@ -106,8 +110,12 @@ export class HomePage {
       this.myfriends = [];
       this.myfriends = this.requestservice.myfriends;
     })
+
     this.loggedin = this.navParams.get("loggedin");
+    this.loggedin = this.navParams.get("employer");
+    // this.loggedin = this.navParams.data;
     console.log(this.loggedin);
+    console.log(this.employer);
   }
 
   ionViewWillLeave(){
@@ -154,7 +162,8 @@ export class HomePage {
       if(data.email && data.uid) {
         this.toastCtrl.create({
           message: 'ログインしました！',
-          duration: 3000
+          duration: 1000,
+          position: 'middle'
         }).present();
       }
       else {
@@ -172,7 +181,6 @@ export class HomePage {
     this.swingStack.throwin.subscribe((event: DragEvent) => {
       event.target.style.background = '#ffffff';
     });
-    // this.cards = [{ email: '' }];
     this.cards = [];
     this.addNewCards(1);
   }
@@ -280,7 +288,11 @@ export class HomePage {
      else {
      console.log("見送り");
    }
-   }
+ }
+
+ home(){
+   this.navCtrl.popToRoot();
+ }
 
   prof(){
     // this.provider.loggedin = true;

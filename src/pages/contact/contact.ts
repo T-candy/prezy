@@ -7,8 +7,14 @@ import { NavController } from 'ionic-angular';
 })
 export class ContactPage {
 
+  contact= {}
+
   constructor(public navCtrl: NavController) {
 
+  }
+
+  logForm() {
+    console.log(this.contact);
   }
 
 }

@@ -1,17 +1,25 @@
 <ion-header>
   <ion-navbar>
-    <ion-title>
-      Contact
+    <ion-title ion-start>
+      お問い合わせ
     </ion-title>
   </ion-navbar>
 </ion-header>
 
 <ion-content>
-  <ion-list>
-    <ion-list-header>Follow us on Twitter</ion-list-header>
-    <ion-item>
-      <ion-icon name="ionic" item-start></ion-icon>
-      @ionicframework
-    </ion-item>
-  </ion-list>
+  <form (ngSubmit)="logForm()" padding>
+      <ion-item>
+        <ion-label>タイトル</ion-label>
+        <ion-input type="text" [(ngModel)]="contact.title" name="title"></ion-input>
+      </ion-item>
+      <ion-item>
+        <ion-label>本文</ion-label>
+        <ion-textarea [(ngModel)]="contact.description" name="description" style="height:300px;"></ion-textarea>
+      </ion-item>
+      <div text-center>
+        <button ion-button type="submit" block>
+          <ion-icon ios="ios-send" md="md-send"></ion-icon>
+        </button>
+      </div>
+    </form>
 </ion-content>

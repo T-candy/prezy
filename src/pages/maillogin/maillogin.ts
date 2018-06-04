@@ -5,6 +5,7 @@ import * as firebase from 'firebase/app';
 import { AuthProvider } from '../../providers/auth/auth';
 import { usercreds } from '../../models/interfaces/usercreds';
 import { HomePage } from '../home/home';
+import { TabsPage } from '../tabs/tabs';
 
 /**
  * Generated class for the MailloginPage page.
@@ -21,6 +22,7 @@ import { HomePage } from '../home/home';
 export class MailloginPage {
 
   loggedin = false;
+  employer = false;
 
   provider = {
     name: '',
@@ -42,6 +44,7 @@ export class MailloginPage {
   }
 
   credentials = {} as usercreds;
+  companydata = {}
 
   constructor(
     public navCtrl: NavController,
@@ -54,6 +57,11 @@ export class MailloginPage {
 
   ionViewDidLoad() {
     console.log('ionViewDidLoad MailloginPage');
+  }
+
+  ionViewWillEnter() {
+    this.employer = this.navParams.get("employer");
+    console.log(this.employer);
   }
 
   register(){
@@ -73,15 +81,33 @@ export class MailloginPage {
       if (!res.code) {
         console.log(res);
         this.loggedin = true;
-        this.navCtrl.setRoot(HomePage, {loggedin: this.loggedin});
+        // this.navCtrl.setRoot(HomePage, {loggedin: this.loggedin});
+        this.navCtrl.setRoot(TabsPage, {loggedin: this.loggedin});
       } else {
         console.log(res);
       }
     })
   }
 
+  FBlogin(){
+    this.authservice.FBlogin().then(() => {
+      this.loggedin = true;
+      this.navCtrl.setRoot(TabsPage, {loggedin: this.loggedin});
+    })
+  }
+
   back(){
     this.viewCtrl.dismiss();
+  }
+
+  register2() {
+    this.loggedin = true;
+    this.employer = true;
+    console.log(this.companydata);
+    this.navCtrl.setRoot(TabsPage, {
+      loggedin: this.loggedin,
+      employer: this.employer
+    })
   }
 
 }

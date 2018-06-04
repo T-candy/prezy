@@ -4,6 +4,7 @@ import { UserProvider } from '../../providers/user/user';
 import { RequestsProvider } from '../../providers/requests/requests';
 import { ChatProvider } from '../../providers/chat/chat';
 import { connreq } from '../../models/interfaces/request';
+import { HomePage } from '../home/home';
 import { MatchPage } from '../match/match';
 import firebase from 'firebase';
 
@@ -28,9 +29,10 @@ export class ChatmainPage {
   myrequests;
   myfriends;
 
+  loggedin = false;
+
   // provider:any;
   provider = {
-    loggedin: false,
     name: '',
     email: '',
     photoURL: '',
@@ -133,12 +135,6 @@ export class ChatmainPage {
 // リクエストを承認
  accept(item) {
     this.requestservice.acceptrequest(item).then(() => {
-      // let newalert = this.alertCtrl.create({
-      //   title: 'Friend added',
-      //   subTitle: 'Tap on the friend to chat with him',
-      //   buttons: ['Okay']
-      // });
-      // newalert.present();
       this.navCtrl.setRoot(MatchPage, item);
     })
     this.chatservice.initializebuddy(item);
@@ -156,6 +152,10 @@ export class ChatmainPage {
   buddychat(buddy) {
     this.chatservice.initializebuddy(buddy);
     this.navCtrl.push('BuddychatPage');
+  }
+
+  home(){
+    this.navCtrl.popToRoot();
   }
 
 }

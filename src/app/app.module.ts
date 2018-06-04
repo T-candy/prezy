@@ -12,7 +12,6 @@ import { AngularFireDatabaseModule, AngularFireDatabase } from 'angularfire2/dat
 import { Facebook } from '@ionic-native/facebook';
 
 import { MyApp } from './app.component';
-import { AuthProvider } from '../providers/auth/auth';
 
 import { HttpModule } from '@angular/http';
 import { HttpClientModule } from '@angular/common/http';
@@ -23,6 +22,7 @@ import { FileChooser } from '@ionic-native/file-chooser';
 import { FilePath } from '@ionic-native/file-path';
 import { Camera } from '@ionic-native/camera';
 
+import { TabsPage } from '../pages/tabs/tabs';
 import { HomePage } from '../pages/home/home';
 import { ProfilePage } from '../pages/profile/profile';
 import { MatchPage } from '../pages/match/match';
@@ -31,14 +31,19 @@ import { ChatindPage } from '../pages/chatind/chatind';
 import { PhotoPage } from '../pages/photo/photo';
 import { LoginPage } from '../pages/login/login';
 import { MailloginPage } from '../pages/maillogin/maillogin';
+import { AboutPage } from '../pages/about/about';
+import { ContactPage } from '../pages/contact/contact';
+
 import { UserProvider } from '../providers/user/user';
 import { ImghandlerProvider } from '../providers/imghandler/imghandler';
 import { RequestsProvider } from '../providers/requests/requests';
 import { ChatProvider } from '../providers/chat/chat';
+import { AuthProvider } from '../providers/auth/auth';
 
 @NgModule({
   declarations: [
     MyApp,
+    TabsPage,
     HomePage,
     ProfilePage,
     MatchPage,
@@ -46,11 +51,15 @@ import { ChatProvider } from '../providers/chat/chat';
     ChatindPage,
     PhotoPage,
     LoginPage,
-    MailloginPage
+    MailloginPage,
+    AboutPage,
+    ContactPage
   ],
   imports: [
     BrowserModule,
-    IonicModule.forRoot(MyApp),
+    IonicModule.forRoot(MyApp, {
+      tabsHideOnSubPages:true,
+    }),
     AngularFireModule.initializeApp(config),
     AngularFireAuthModule,
     AngularFireDatabaseModule,
@@ -61,6 +70,7 @@ import { ChatProvider } from '../providers/chat/chat';
   bootstrap: [IonicApp],
   entryComponents: [
     MyApp,
+    TabsPage,
     HomePage,
     ProfilePage,
     MatchPage,
@@ -68,7 +78,9 @@ import { ChatProvider } from '../providers/chat/chat';
     ChatindPage,
     PhotoPage,
     LoginPage,
-    MailloginPage
+    MailloginPage,
+    AboutPage,
+    ContactPage
   ],
   providers: [
     StatusBar,

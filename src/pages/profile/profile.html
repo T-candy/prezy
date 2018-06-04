@@ -1,117 +1,90 @@
-<ion-header>
+<ion-header [hidden]="loggedin">
     <ion-navbar style="min-height:80px">
-     <ion-grid *ngIf="loggedin">
-       <ion-row>
-          <ion-col>
-              <img src="{{ provider.photoURL }}" style="width:60px;height:60px;border-radius:50%">
-          </ion-col>
-          <ion-col>
-             <button ion-button icon-only large clear color="dark" (click)="home()">
-                <ion-icon name="md-people"></ion-icon>
-              </button>
-            </ion-col>
-          <ion-col text-right>
-            <button ion-button icon-only large clear color="dark" (click)="chatm()">
-              <ion-icon name="ios-text"></ion-icon>
-            </button>
-          </ion-col>
-       </ion-row>
-     </ion-grid>
+      <ion-title>プロフィール詳細</ion-title>
      </ion-navbar>
   </ion-header>
 
 <ion-content padding>
+  <div>
   <p text-center>
-      <img src="{{provider.photoURL}}" style="width:150px;height:150px;border-radius:50%">
+      <img src="{{provider.photoURL}}" class="profileimg">
   </p>
   <p text-center>
     {{provider.name}} <br>
    <span style="color:grey">{{provider.affiliation}}</span>
   </p>
-  <!-- <ion-row>
-    <ion-col>
-        <p text-center>
-            <img src="images/huma.jpg" style="width:80px;height:80px;border-radius:50%">
-        </p>
-    </ion-col>
-    <ion-col>
-        <p text-center>
-            <img src="images/disha.jpg" style="width:80px;height:80px;border-radius:50%">
-        </p>
-    </ion-col>
-    <ion-col>
-        <p text-center>
-            <img src="images/madh.jpg" style="width:80px;height:80px;overflow:hidden; border-radius:50%">
-        </p>
-    </ion-col>
-  </ion-row> -->
+
   <ion-card>
-    <ion-card-content  text-center>
-    <ion-card-title>自己紹介</ion-card-title>
-    {{provider.intro}}
-  </ion-card-content>
+    <ion-card-header>自己紹介</ion-card-header>
+    <ion-card-content>
+      {{provider.intro}}
+    </ion-card-content>
   </ion-card>
 
   <ion-card>
+    <ion-card-header>学歴</ion-card-header>
     <ion-card-content  text-center>
-    <ion-card-title>学歴</ion-card-title>
-    <p>{{provider.school.name}}</p>
-    <p>{{provider.school.department}}</p>
-    <p>{{provider.school.graduation}}年卒業</p>
-  </ion-card-content>
+      <ion-list>
+        <p>{{provider.school.name}}</p>
+        <p>{{provider.school.department}}</p>
+        <p>{{provider.school.graduation}}年卒業</p>
+      </ion-list>
+    </ion-card-content>
   </ion-card>
 
   <ion-card>
+    <ion-card-header>職歴</ion-card-header>
     <ion-card-content  text-center>
-    <ion-card-title>職歴</ion-card-title>
-    <p>{{provider.company.name}}</p>
-    <p>{{provider.company.position}}</p>
-    <p>{{provider.company.category}}</p>
-  </ion-card-content>
+      <ion-list>
+        <p>{{provider.company.name}}</p>
+        <p>{{provider.company.position}}</p>
+        <p>{{provider.company.category}}</p>
+      </ion-list>
+    </ion-card-content>
   </ion-card>
 
   <ion-card>
-    <ion-card-content  text-center>
-    <ion-card-title>スキル</ion-card-title>
-    <p>{{provider.skill}}</p>
-  </ion-card-content>
+    <ion-card-header>スキル</ion-card-header>
+    <ion-card-content text-center *ngIf="provider.skill">
+      <ion-chip *ngFor="let skills of provider.skill" style="margin:5px;">
+        <ion-label>
+          {{skills}}
+        </ion-label>
+      </ion-chip>
+    </ion-card-content>
   </ion-card>
 
-  <ion-row text-center *ngIf="loggedin">
+  <ion-row text-center [hidden]="!loggedin">
     <ion-col>
-        <button ion-button icon-left outline color="cuspurple">
-            <ion-icon style="margin-top:-4px" name="infinite"></ion-icon>
-           アップグレード
+        <button ion-button icon-left outline color="dark" (click)="pho()">
+            <ion-icon style="margin-top:-4px" name="md-create"></ion-icon>
+           編集
           </button>
     </ion-col>
     <ion-col>
-        <button ion-button icon-left outline color="cuspurple" (click)="pho()">
+        <button ion-button icon-left outline color="dark" (click)="config()">
             <ion-icon style="margin-top:-4px" name="md-cog"></ion-icon>
            設定
           </button>
     </ion-col>
   </ion-row>
-
-<div *ngIf="loggedin">
-  <h4 text-center>Share with Friends</h4>
-  <p text-center>
-    <button ion-button full color="light" (click)="logout()" style="border-radius:40px;">
-      logout
-    </button>
-  </p>
 </div>
 </ion-content>
 
-<ion-footer no-border *ngIf="!loggedin">
-    <ion-buttons text-center>
-      <button ion-button icon-only outline color="danger" (click)="voteUp(false)" style="width:70px;height:70px;border-radius:50%">
-          <ion-icon name="md-thumbs-down"></ion-icon>
-        </button>
-      <button ion-button icon-only outline color="cuspurple" style="width:50px;height:50px;border-radius:50%" (click)="chatid()">
+<ion-footer no-border [hidden]="loggedin">
+  <ion-row text-center>
+    <ion-col>
+      <button ion-button icon-only outline color="danger" (click)="voteUp(false)" class="judge">
+        <ion-icon name="md-thumbs-down"></ion-icon>
+      </button>
+    </ion-col>
+      <!-- <button ion-button icon-only outline color="cuspurple" style="width:50px;height:50px;border-radius:50%" (click)="chatid()">
             <ion-icon name="md-flash"></ion-icon>
-      </button>
-      <button ion-button icon-only outline color="secondary" (click)="voteUp(true)" style="width:70px;height:70px;border-radius:50%">
-            <ion-icon name="md-thumbs-up"></ion-icon>
-      </button>
-    </ion-buttons>
+      </button> -->
+      <ion-col>
+        <button ion-button icon-only outline color="secondary" (click)="voteUp(true)" class="judge">
+          <ion-icon name="md-thumbs-up"></ion-icon>
+        </button>
+      </ion-col>
+  </ion-row>
 </ion-footer>
