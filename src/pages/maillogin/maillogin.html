@@ -16,7 +16,7 @@
 
 <ion-content>
     <div>
-        <ion-segment [(ngModel)]="open" style="background: linear-gradient(to right, #FF8000 , #FE9A2E, #F7BE81)">
+        <ion-segment [(ngModel)]="open" style="background-color:gray;">
           <ion-segment-button value="register" style="color:white">
             新規登録
           </ion-segment-button>
@@ -30,17 +30,17 @@
         <ion-list *ngSwitchDefault padding>
           <ion-list-header>新規登録</ion-list-header>
           <ion-item>
-            <ion-label color="main" stacked>名前</ion-label>
+            <ion-label color="dark" stacked>名前</ion-label>
             <ion-input type="text" placeholder="name Input" [(ngModel)]="credentials.name"></ion-input>
           </ion-item>
 
           <ion-item>
-            <ion-label color="main" stacked>メールアドレス</ion-label>
+            <ion-label color="dark" stacked>メールアドレス</ion-label>
             <ion-input type="email" placeholder="Email Input" [(ngModel)]="credentials.email"></ion-input>
           </ion-item>
 
           <ion-item>
-            <ion-label color="main" stacked>パスワード</ion-label>
+            <ion-label color="dark" stacked>パスワード</ion-label>
             <ion-input type="password" placeholder="Password Input" [(ngModel)]="credentials.password"></ion-input>
           </ion-item>
 
@@ -52,12 +52,12 @@
         <ion-list *ngSwitchCase="'login'" padding>
           <ion-list-header>ログイン</ion-list-header>
           <ion-item>
-            <ion-label color="main" stacked>メールアドレス</ion-label>
+            <ion-label color="dark" stacked>メールアドレス</ion-label>
             <ion-input type="email" placeholder="Email Input" [(ngModel)]="credentials.email"></ion-input>
           </ion-item>
 
           <ion-item>
-            <ion-label color="main" stacked>パスワード</ion-label>
+            <ion-label color="dark" stacked>パスワード</ion-label>
             <ion-input type="password" placeholder="Password Input" [(ngModel)]="credentials.password"></ion-input>
           </ion-item>
           <p>パスワードを忘れた方はこちら</p>
@@ -71,36 +71,36 @@
 
       <div [ngSwitch]="open" [hidden]="!employer">
         <ion-list *ngSwitchDefault padding>
-          <ion-list-header>企業新規登録</ion-list-header>
+          <ion-list-header>社長登録</ion-list-header>
 
           <ion-item>
-            <ion-label color="main" stacked>会社名</ion-label>
+            <ion-label color="dark" stacked>会社名</ion-label>
             <ion-input type="text" placeholder="株式会社太郎" [(ngModel)]="companydata.companyname"></ion-input>
           </ion-item>
 
           <ion-item>
-            <ion-label color="main" stacked>都道府県</ion-label>
+            <ion-label color="dark" stacked>都道府県</ion-label>
             <ion-input type="text" placeholder="宮城県" [(ngModel)]="companydata.place"></ion-input>
           </ion-item>
 
           <ion-item>
-            <ion-label color="main" stacked>会社ホームページ</ion-label>
+            <ion-label color="dark" stacked>会社ホームページ</ion-label>
             <ion-input type="text" placeholder="http://google.com" [(ngModel)]="companydata.homepage"></ion-input>
           </ion-item>
 
           <ion-item>
-            <ion-label color="main" stacked>社長のお名前</ion-label>
+            <ion-label color="dark" stacked>社長のお名前</ion-label>
             <ion-input type="text" placeholder="太郎" [(ngModel)]="companydata.name"></ion-input>
           </ion-item>
 
           <ion-item>
-            <ion-label color="main" stacked>メールアドレス</ion-label>
-            <ion-input type="email" placeholder="Email Input" [(ngModel)]="companydata.email"></ion-input>
+            <ion-label color="dark" stacked>メールアドレス</ion-label>
+            <ion-input type="email" placeholder="example@prezy.com" [(ngModel)]="companydata.email"></ion-input>
           </ion-item>
 
           <ion-item>
-            <ion-label color="main" stacked>パスワード</ion-label>
-            <ion-input type="password" placeholder="Password Input" [(ngModel)]="companydata.password"></ion-input>
+            <ion-label color="dark" stacked>パスワード</ion-label>
+            <ion-input type="password" placeholder="******" [(ngModel)]="companydata.password"></ion-input>
           </ion-item>
 
           <div text-center>
@@ -111,16 +111,19 @@
         <ion-list *ngSwitchCase="'login'" padding>
           <ion-list-header>ログイン</ion-list-header>
           <ion-item>
-            <ion-label color="main" stacked>Email</ion-label>
-            <ion-input type="email" placeholder="Email Input" [(ngModel)]="companydata.email"></ion-input>
+            <ion-label color="dark" stacked>Email</ion-label>
+            <ion-input type="email" placeholder="example@prezy.com" [(ngModel)]="companydata.email"></ion-input>
           </ion-item>
 
           <ion-item>
-            <ion-label color="main" stacked>Password</ion-label>
+            <ion-label color="dark" stacked>Password</ion-label>
             <ion-input type="password" placeholder="Password Input" [(ngModel)]="companydata.password"></ion-input>
           </ion-item>
           <p>パスワードを忘れた方はこちら</p>
 
+          <div text-center>
+            <button ion-button round margin-top color="main" (click)="login2()">ログインする</button>
+        </div>
         </ion-list>
       </div>
 

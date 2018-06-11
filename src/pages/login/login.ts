@@ -28,8 +28,6 @@ import { TabsPage } from '../tabs/tabs';
 export class LoginPage {
   @ViewChild(Slides) slider: Slides;
 
-  firedata = firebase.database().ref('/users');
-
   loggedin = false;
   employer = false;
 

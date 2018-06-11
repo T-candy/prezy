@@ -17,6 +17,7 @@ import { Facebook } from '@ionic-native/facebook';
 export class AuthProvider {
 
   firedata = firebase.database().ref('/users');
+  firedata2 = firebase.database().ref('/president');
 
   provider = {
     name: '',
@@ -38,6 +39,7 @@ export class AuthProvider {
   }
 
   credentials = {} as usercreds;
+  companydata = {}
 
   constructor(
     public http: HttpClient,
@@ -97,7 +99,7 @@ FBlogin(){
   return promise;
   }
 
-//  メール登録＆ログイン＆データベースに保存
+//  一般ユーザ メール登録＆ログイン＆データベースに保存
   register(credentials: usercreds) {
     var promise = new Promise((resolve, reject) => {
       this.afAuth.auth.createUserWithEmailAndPassword(credentials.email, credentials.password).then(() => {
@@ -129,7 +131,7 @@ FBlogin(){
     return promise;
   }
 
-//  メールログイン
+//  一般ユーザ メールログイン
   login(credentials: usercreds) {
     var promise = new Promise((resolve, reject) => {
       this.afAuth.auth.signInWithEmailAndPassword(credentials.email, credentials.password).then(() => {
@@ -145,6 +147,55 @@ FBlogin(){
     })
     return promise;
   }
+
+  //  社長 メール登録＆ログイン＆データベースに保存
+    register2(companydata) {
+      var promise = new Promise((resolve, reject) => {
+        this.afAuth.auth.createUserWithEmailAndPassword(companydata.email, companydata.password).then(() => {
+            this.firedata2.child(this.afAuth.auth.currentUser.uid).set({
+                uid: this.afAuth.auth.currentUser.uid,
+                name: companydata.name,
+                email: this.afAuth.auth.currentUser.email,
+                photoURL: '',
+                intro : '私は社長です。変更してないよ',
+                school:{
+                  name: '',
+                  department: '',
+                  graduation: ''
+                },
+                currentcompany: {
+                  name: companydata.companyname,
+                  place:companydata.place,
+                  homepage: '',
+                  position: '',
+                  category: ''
+                }
+              }).then(() => {
+                resolve(true);
+              })
+        }).catch((err) => {
+          reject(err);
+         })
+      })
+      return promise;
+    }
+
+  //  社長 メールログイン
+    login2(companydata) {
+      var promise = new Promise((resolve, reject) => {
+        this.afAuth.auth.signInWithEmailAndPassword(companydata.email, companydata.password).then(() => {
+          this.afAuth.auth.currentUser.updateProfile({
+            displayName : companydata.name,
+            photoURL : ''
+          }).then(() => {
+            resolve(true);
+          })
+        }).catch((err) => {
+          reject(err);
+         })
+      })
+      return promise;
+    }
 
   // ログアウト
   logout(){

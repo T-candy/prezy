@@ -7,8 +7,8 @@
 <ion-content padding>
 
   <div text-center margin>
-    <h3 [hidden]="employer">今日の社長</h3>
-    <h3 [hidden]="!employer">今日の学生</h3>
+    <h3 [hidden]="employer">今日のおすすめ社長</h3>
+    <h3 [hidden]="!employer">あなたに興味のある学生</h3>
   </div>
 
   <div swing-stack #myswing1 [stackConfig]="stackConfig" (throwoutleft)="voteUp(false)" (throwoutright)="voteUp(true)" (click)="userdetail()" id="card-stack">

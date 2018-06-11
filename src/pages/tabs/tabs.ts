@@ -10,8 +10,10 @@ import { HomePage } from '../home/home';
 })
 export class TabsPage {
 
-  loggedin = {loggedin: this.navParams.get("loggedin")};
-  employer = {loggedin: this.navParams.get("employer")};
+  data = {
+    loggedin: this.navParams.get("loggedin") ,
+    employer: this.navParams.get("employer")
+  }
 
   tab1Root = ProfilePage;
   tab2Root = HomePage;

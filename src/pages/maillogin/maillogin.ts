@@ -64,50 +64,87 @@ export class MailloginPage {
     console.log(this.employer);
   }
 
+  // 一般登録
   register(){
     this.authservice.register(this.credentials).then((res: any) => {
       if (!res.code) {
         console.log(res);
         this.loggedin = true;
-        this.navCtrl.setRoot(HomePage, {loggedin: this.loggedin});
+        this.employer = false;
+        this.navCtrl.setRoot(HomePage, {
+          loggedin: this.loggedin,
+          employer: this.employer
+        });
       } else {
         console.log(res);
       }
     })
   }
 
+  // 一般ログイン
   login(){
     this.authservice.login(this.credentials).then((res: any) => {
       if (!res.code) {
         console.log(res);
         this.loggedin = true;
-        // this.navCtrl.setRoot(HomePage, {loggedin: this.loggedin});
-        this.navCtrl.setRoot(TabsPage, {loggedin: this.loggedin});
+        this.employer = false;
+        this.navCtrl.setRoot(TabsPage, {
+          loggedin: this.loggedin,
+          employer: this.employer
+        });
       } else {
         console.log(res);
       }
     })
   }
 
+  // 一般FBログイン
   FBlogin(){
     this.authservice.FBlogin().then(() => {
       this.loggedin = true;
-      this.navCtrl.setRoot(TabsPage, {loggedin: this.loggedin});
+      this.navCtrl.setRoot(TabsPage, {
+        loggedin: this.loggedin,
+        employer: this.employer
+      });
     })
   }
 
-  back(){
-    this.viewCtrl.dismiss();
-  }
-
+  // 社長登録
   register2() {
-    this.loggedin = true;
-    this.employer = true;
-    console.log(this.companydata);
-    this.navCtrl.setRoot(TabsPage, {
-      loggedin: this.loggedin,
-      employer: this.employer
-    })
-  }
+  this.authservice.register2(this.companydata).then((res: any) => {
+    if (!res.code) {
+      console.log(res);
+      this.loggedin = true;
+      this.employer = true;
+      this.navCtrl.setRoot(TabsPage, {
+        loggedin: this.loggedin,
+        employer: this.employer
+      });
+    } else {
+      console.log(res);
+    }
+  })
+}
+
+  // 社長ログイン
+  login2() {
+  this.authservice.login2(this.companydata).then((res: any) => {
+    if (!res.code) {
+      console.log(res);
+      this.loggedin = true;
+      this.employer = true;
+      this.navCtrl.setRoot(TabsPage, {
+        loggedin: this.loggedin,
+        employer: this.employer
+      });
+    } else {
+      console.log(res);
+    }
+  })
+}
+
+ back(){
+   this.viewCtrl.dismiss();
+ }
 
 }

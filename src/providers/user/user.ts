@@ -12,6 +12,7 @@ import firebase from 'firebase';
 @Injectable()
 export class UserProvider {
   firedata = firebase.database().ref('/users');
+  firedata2 = firebase.database().ref('/president');
   firestore = firebase.storage();
   provider:any;
 
@@ -107,7 +108,7 @@ export class UserProvider {
     return promise;
   }
 
-// ログインユーザーの情報を取得
+// 学生ログインユーザーの情報を取得
 getuserdetails() {
     var promise = new Promise((resolve, reject) => {
     this.firedata.child(firebase.auth().currentUser.uid).once('value', (snapshot) => {
@@ -118,6 +119,18 @@ getuserdetails() {
     })
     return promise;
   }
+
+  // 社長ログインユーザーの情報を取得
+  getpresidentdetails() {
+      var promise = new Promise((resolve, reject) => {
+      this.firedata2.child(firebase.auth().currentUser.uid).once('value', (snapshot) => {
+        resolve(snapshot.val());
+      }).catch((err) => {
+        reject(err);
+        })
+      })
+      return promise;
+    }
 
 // 自分以外のすべてのユーザー情報を取得
   getallusers() {

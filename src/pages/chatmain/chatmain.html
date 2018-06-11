@@ -22,7 +22,7 @@
 
 <ion-content>
     <div >
-        <ion-segment [(ngModel)]="chats" style="background: linear-gradient(to right, #FF8000 , #FE9A2E, #F7BE81)">
+        <ion-segment [(ngModel)]="chats" style="background-color:gray;">
           <ion-segment-button value="heart" style="color:white">
             All
           </ion-segment-button>
@@ -46,7 +46,7 @@
             <p>This is text message</p>
           </ion-item>
         </ion-list>
-  
+
         <ion-list *ngSwitchCase="'chat'">
           <ion-item-sliding *ngFor="let key of filteredusers">
             <ion-item >

@@ -33,6 +33,7 @@ export class HomePage {
   recentCard: string = '';
 
   firedata = firebase.database().ref('/users');
+  firedata2 = firebase.database().ref('/president');
   firereq = firebase.database().ref('/requests');
   firefriends = firebase.database().ref('/friends');
   filteredusers = [];
@@ -41,27 +42,29 @@ export class HomePage {
   myfriends;
   myrequestsender;
 
-  employer = false;
+  employer = this.navParams.get("employer");
   loggedin = false;
 
-  provider = {
-    name: '',
-    email: '',
-    photoURL: '',
-    intro: '',
-    affiliation: '',
-    skill: '',
-    school:{
-      name: '',
-      department: '',
-      graduation: ''
-    },
-    company: {
-      name: '',
-      position: '',
-      category: ''
-    }
-  }
+  provider = {}
+
+  // provider = {
+  //   name: '',
+  //   email: '',
+  //   photoURL: '',
+  //   intro: '',
+  //   affiliation: '',
+  //   skill: '',
+  //   school:{
+  //     name: '',
+  //     department: '',
+  //     graduation: ''
+  //   },
+  //   company: {
+  //     name: '',
+  //     position: '',
+  //     category: ''
+  //   }
+  // }
 
   constructor(
     private toastCtrl: ToastController,
@@ -102,6 +105,11 @@ export class HomePage {
  }
 
   ionViewWillEnter() {
+    this.loggedin = this.navParams.get("loggedin");
+    // this.employer = this.navParams.get("employer");
+    console.log(this.loggedin);
+    console.log(this.employer);
+
     this.loaduserdetails();
     this.loadrequestdetails();
 
@@ -109,13 +117,7 @@ export class HomePage {
     this.events.subscribe('friends', () => {
       this.myfriends = [];
       this.myfriends = this.requestservice.myfriends;
-    })
-
-    this.loggedin = this.navParams.get("loggedin");
-    this.loggedin = this.navParams.get("employer");
-    // this.loggedin = this.navParams.data;
-    console.log(this.loggedin);
-    console.log(this.employer);
+     })
   }
 
   ionViewWillLeave(){
@@ -131,10 +133,17 @@ export class HomePage {
   }
 
   loaduserdetails() {
+    if(this.employer) {
+      this.userservice.getpresidentdetails().then((res: any) => {
+        this.provider = res;
+      })
+    } else {
     this.userservice.getuserdetails().then((res: any) => {
       this.provider = res;
     })
   }
+  console.log(this.provider);
+}
 
   loadrequestdetails() {
     this.requestservice.getmyrequestsender();
@@ -149,11 +158,13 @@ export class HomePage {
     })
   }
 
+  // カードを押したとき 詳細プロデュース表示
   userdetail() {
     this.loggedin = false;
     this.navCtrl.push(ProfilePage, {
       recipient: this.cards[0],
-      loggedin: this.loggedin
+      loggedin: this.loggedin,
+      employer: this.employer
     });
   }
 
@@ -295,14 +306,18 @@ export class HomePage {
  }
 
   prof(){
-    // this.provider.loggedin = true;
-    this.navCtrl.push(ProfilePage, {loggedin: this.loggedin});
-  }
+    this.navCtrl.push(ProfilePage, {
+    loggedin: this.loggedin,
+    employer: this.employer
+  });
+}
+
   chatm(){
-    // this.provider.loggedin = true;
     this.navCtrl.push(ChatmainPage, {loggedin: this.loggedin})
   }
+
   chatid(){
     this.navCtrl.push(ChatindPage)
   }
+
 }

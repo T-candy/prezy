@@ -25,24 +25,28 @@ import firebase from 'firebase';
 })
 export class ProfilePage {
   loggedin = false;
-  provider = {
-    name: '',
-    email: '',
-    photoURL: '',
-    intro: '',
-    affiliation: '',
-    skill: [],
-    school:{
-      name: '',
-      department: '',
-      graduation: ''
-    },
-    company: {
-      name: '',
-      position: '',
-      category: ''
-    }
-  }
+  employer =  this.navParams.get("employer");
+
+  provider = {}
+
+  // provider = {
+  //   name: '',
+  //   email: '',
+  //   photoURL: '',
+  //   intro: '',
+  //   affiliation: '',
+  //   skill: [],
+  //   school:{
+  //     name: '',
+  //     department: '',
+  //     graduation: ''
+  //   },
+  //   company: {
+  //     name: '',
+  //     position: '',
+  //     category: ''
+  //   }
+  // }
 
   constructor(
     public navCtrl: NavController,
@@ -61,22 +65,36 @@ export class ProfilePage {
 
   ionViewWillEnter() {
     this.getuserdetail();
+    // this.witchuser();
   }
 
+  // providerに入れるロジック
   getuserdetail() {
     this.loggedin = this.navParams.get("loggedin");
+    // this.employer = this.navParams.get("employer");
     console.log(this.loggedin);
 
     if (this.loggedin) {
-      this.userservice.getuserdetails().then((res: any) => {
-        this.provider = res;
-        console.log(this.provider);
-      })
+      if(this.employer) {
+        this.userservice.getpresidentdetails().then((res: any) => {
+          this.provider = res;
+        })
+      } else {
+        this.userservice.getuserdetails().then((res: any) => {
+          this.provider = res;
+        })
+      }
+     console.log(this.provider);
     } else {
      this.provider = this.navParams.get("recipient");
      console.log(this.provider);
    }
  }
+
+ // 表ロジック
+//  witchuser() {
+//  this.employer = this.navParams.get("employer");
+// }
 
   pho(){
     this.navCtrl.push(PhotoPage, {loggedin: this.loggedin});
